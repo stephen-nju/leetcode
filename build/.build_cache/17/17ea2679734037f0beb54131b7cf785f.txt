@@ -1,6 +1,0 @@
-{
-    errdata = "\27[01m\27[Ksrc\\leetcode.cc:3:5:\27[m\27[K \27[01;35m\27[Kwarning: \27[m\27[Kfirst argument of '\27[01m\27[Kint main(char*, char**)\27[m\27[K' should be '\27[01m\27[Kint\27[m\27[K' [\27[01;35m\27[K-Wmain\27[m\27[K]\
-    3 | int \27[01;35m\27[Kmain\27[m\27[K(char *arg,char **argv){\
-      |     \27[01;35m\27[K^~~~\27[m\27[K\
-"
-}
