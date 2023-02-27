@@ -1,0 +1,9 @@
+{
+    find_program = {
+        ldc2 = false,
+        dmd = false,
+        clang = false,
+        gdc = false,
+        zig = false
+    }
+}
