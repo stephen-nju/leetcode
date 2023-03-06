@@ -24,7 +24,7 @@ class Solution
 {
   public:
     int minDistance(string word1, string word2);
-    // 正则表达式匹配
+    // 10. 正则表达式匹配
     bool isMatch(string s, string p);
     // 二叉树最大直径
     int diameterOfBinaryTree(TreeNode *root);
@@ -40,6 +40,9 @@ class Solution
     int maxProfit_2(vector<int> &prices);
     // 123. 买卖股票的最佳时机 III
     int maxProfit_3(vector<int> &prices);
+
+    // 77.组合
+    int **combine(int n, int k, int *returnSize, int **returnColumnSizes);
 
   private:
     void quickSort(int arr[], int left, int right);

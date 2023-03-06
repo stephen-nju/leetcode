@@ -27,6 +27,7 @@ int Solution::minDistance(string word1, string word2) {
     free(dp);
     return distance;
 }
+
 bool Solution::isMatch(string s, string p) {
     int m = s.size();
     int n = p.size();
@@ -46,9 +47,13 @@ bool Solution::isMatch(string s, string p) {
     for (int i = 1; i < m + 1; i++) {
         for (int j = 1; j < n + 1; j++) {
             if (s[i - 1] == p[j - 1] || p[j - 1] == '.') {
+                // 先考虑第i个字符和第j个字符是否匹配
                 dp[i][j] = dp[i - 1][j - 1];
             } else if (p[j - 1] == '*') {
+                // 如果不匹配，现在考虑第j个字符为通配符*的情况
                 if (s[i - 1] == p[j - 2] || p[j - 2] == '.') {
+                    // 如果能够匹配上，可以分为匹配0次，匹配一次，匹配两次以上，如果次数大于两次以上，可以考虑去掉s末尾字符串，
+                    // 保留原模式
                     dp[i][j] = dp[i][j - 2] || dp[i - 1][j - 2] || dp[i - 1][j];
                 } else {
                     dp[i][j] = dp[i][j - 2];
@@ -224,9 +229,8 @@ int Solution::maxProfit_3(vector<int> &prices) {
         dp[0][k][0] = 0;
         dp[0][k][1] = -prices[0];
     }
-
     for (int i = 1; i < n; i++) {
-        for (int k = K + 1; k >= 1; k--) {
+        for (int k = 1; k < K + 1; k++) {
             // 买入卖出算一次交易，这里只针对买入计算交易次数
             dp[i][k][0] = std::max(dp[i - 1][k][0], dp[i - 1][k][1] + prices[i]);
             dp[i][k][1] = std::max(dp[i - 1][k][1], dp[i - 1][k - 1][0] - prices[i]);
@@ -234,5 +238,38 @@ int Solution::maxProfit_3(vector<int> &prices) {
     }
     return dp[n - 1][K][0];
 }
+
+
+/**
+ * Return an array of arrays of size *returnSize.
+ * The sizes of the arrays are returned as *returnColumnSizes array.
+ * Note: Both returned array and *columnSizes array must be malloced, assume caller calls free().
+ */
+void backtracking(int cur, int n, int k, int count, int **ans, int ans_size, int *temp, int temp_size) {
+    if (count == k) {
+        
+        int *tmp = (int *)malloc(sizeof(int) * (k + 1));
+        for (int i = 0; i < k; i++) { tmp[i] = temp[i]; }
+        ans[ans_size++] = tmp;
+        return;
+    }
+    temp[temp_size++] = cur;
+    backtracking(cur + 1, n, k, count, ans, ans_size, temp, temp_size);
+    temp_size--;
+}
+
+int **Solution::combine(int n, int k, int *returnSize, int **returnColumnSizes) {
+    int **ans = (int **)malloc(sizeof(int *) * 10001);
+    int *temp = (int *)malloc(sizeof(int) * (k + 1));
+    int ans_size = 0;
+    int temp_size = 0;
+    int count = 0;
+    backtracking(1, n, k, count, ans, ans_size, temp, temp_size);
+    *returnSize = ans_size;
+    *returnColumnSizes = (int *)malloc(sizeof(int) * ans_size);
+    for (int i = 0; i < ans_size; i++) { (*returnColumnSizes)[i] = k; }
+    return ans;
+}
+
 
 }// namespace leetcode
