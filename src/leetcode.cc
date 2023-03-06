@@ -245,16 +245,15 @@ int Solution::maxProfit_3(vector<int> &prices) {
  * The sizes of the arrays are returned as *returnColumnSizes array.
  * Note: Both returned array and *columnSizes array must be malloced, assume caller calls free().
  */
-void backtracking(int cur, int n, int k, int count, int **ans, int ans_size, int *temp, int temp_size) {
-    if (count == k) {
-        
+void backtracking(int cur, int n, int k, int **ans, int ans_size, int *temp, int temp_size) {
+    if (temp_size == k) {
         int *tmp = (int *)malloc(sizeof(int) * (k + 1));
         for (int i = 0; i < k; i++) { tmp[i] = temp[i]; }
         ans[ans_size++] = tmp;
         return;
     }
     temp[temp_size++] = cur;
-    backtracking(cur + 1, n, k, count, ans, ans_size, temp, temp_size);
+    backtracking(cur + 1, n, k, ans, ans_size, temp, temp_size);
     temp_size--;
 }
 
@@ -263,8 +262,7 @@ int **Solution::combine(int n, int k, int *returnSize, int **returnColumnSizes) 
     int *temp = (int *)malloc(sizeof(int) * (k + 1));
     int ans_size = 0;
     int temp_size = 0;
-    int count = 0;
-    backtracking(1, n, k, count, ans, ans_size, temp, temp_size);
+    backtracking(1, n, k, ans, ans_size, temp, temp_size);
     *returnSize = ans_size;
     *returnColumnSizes = (int *)malloc(sizeof(int) * ans_size);
     for (int i = 0; i < ans_size; i++) { (*returnColumnSizes)[i] = k; }

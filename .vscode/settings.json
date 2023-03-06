@@ -3,6 +3,8 @@
         "vector": "cpp",
         "random": "cpp",
         "limits": "cpp",
-        "algorithm": "cpp"
+        "algorithm": "cpp",
+        "xmemory": "cpp",
+        "xutility": "cpp"
     }
 }
