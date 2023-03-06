@@ -1,7 +1,15 @@
 
-#include <cstdio>
 #include "leetcode.h"
-int main(char * arg,char* argv[]){
+#include <cstdio>
+#include <memory>
+#include <string>
 
-    leetcode::Solution::minDistance("a","abcd");
+int main(int argc, char const *argv[])
+{
+    std::unique_ptr<leetcode::Solution> solution = std::make_unique<leetcode::Solution>();
+    std::string a = "abc";
+    std::string b = "bc";
+    int c = solution->minDistance(a, b);
+    printf("%d\n", c);
+    return 0;
 }

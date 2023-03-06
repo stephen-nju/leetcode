@@ -1,20 +1,18 @@
 
 #include "leetcode.h"
 
+#include <cstdlib>
 namespace leetcode {
 
 int Solution::minDistance(string word1, string word2) {
+    int distance = 0;
     int m = word1.size();
     int n = word2.size();
-    // int dp[m + 1][n + 1];
-
-    vector<vector<int>> dp;
-    for (int i = 0; i <= m; i++) {
-        dp[i][0] = i;
-    }
-    for (int j = 0; j <= n; j++) {
-        dp[0][j] = j;
-    }
+    int **dp = (int **)malloc(sizeof(int *) * (m + 1));
+    for (int i = 0; i < m + 1; i++) { dp[i] = (int *)malloc(sizeof(int *) * (n + 1)); }
+    // vector<vector<int>> dp;
+    for (int i = 0; i <= m; i++) { dp[i][0] = i; }
+    for (int j = 0; j <= n; j++) { dp[0][j] = j; }
     for (int i = 1; i <= m; i++) {
         for (int j = 1; j <= n; j++) {
             if (word1[i - 1] == word2[j - 1]) {
@@ -24,7 +22,10 @@ int Solution::minDistance(string word1, string word2) {
             }
         }
     }
-    return dp[m][n];
+    distance = dp[m][n];
+    for (int i = 0; i < m + 1; i++) { free(dp[i]); }
+    free(dp);
+    return distance;
 }
 bool Solution::isMatch(string s, string p) {
     int m = s.size();
@@ -33,9 +34,7 @@ bool Solution::isMatch(string s, string p) {
     vector<vector<bool>> dp;
     dp[0][0] = true;
     // 初始化数组
-    for (int i = 1; i < m + 1; i++) {
-        dp[i][0] = false;
-    }
+    for (int i = 1; i < m + 1; i++) { dp[i][0] = false; }
     for (int j = 1; j < n + 1; j++) {
         if (p[j - 1] == '*') {
             dp[0][j] = dp[0][j - 2];
@@ -63,9 +62,8 @@ bool Solution::isMatch(string s, string p) {
     return dp[m][n];
 }
 
-int maxDepth(TreeNode* root, int* diameter) {
-    if (root == nullptr)
-        return 0;
+int maxDepth(TreeNode *root, int *diameter) {
+    if (root == nullptr) return 0;
 
     int left_depth = maxDepth(root->left, diameter);
     int right_depth = maxDepth(root->right, diameter);
@@ -73,11 +71,9 @@ int maxDepth(TreeNode* root, int* diameter) {
     return std::max(left_depth, right_depth) + 1;
 }
 
-int Solution::diameterOfBinaryTree(TreeNode* root) {
+int Solution::diameterOfBinaryTree(TreeNode *root) {
     int diameter = 0;
-    if (root == nullptr) {
-        return 0;
-    }
+    if (root == nullptr) { return 0; }
     maxDepth(root, &diameter);
     return diameter;
 }
@@ -112,36 +108,28 @@ int partition(int arr[], int left, int right) {
 }
 
 void Solution::quickSort(int arr[], int left, int right) {
-    if (left >= right) {
-        return;
-    }
+    if (left >= right) { return; }
     int pivot_index = partition(arr, left, right);
     Solution::quickSort(arr, left, pivot_index - 1);
     Solution::quickSort(arr, pivot_index + 1, right);
 }
 
 void Solution::quickSort(int arr[], int length) {
-    if (length <= 1) {
-        return;
-    };
+    if (length <= 1) { return; };
     Solution::quickSort(arr, 0, length - 1);
 }
 
-//二维背包问题
+// 二维背包问题
 
 int64_t Solution::intPartition() {
     const int N = 10;
     const int M = 100;
     // 创建动态数组dp[M+1][N+1][M+1]
-    int64_t*** dp;
-    dp = new int64_t**[M + 1];
+    int64_t ***dp;
+    dp = new int64_t **[M + 1];
+    for (int i = 0; i < M + 1; i++) { dp[i] = new int64_t *[N + 1]; }
     for (int i = 0; i < M + 1; i++) {
-        dp[i] = new int64_t*[N + 1];
-    }
-    for (int i = 0; i < M + 1; i++) {
-        for (int j = 0; j < N + 1; j++) {
-            dp[i][j] = new int64_t[M + 1];
-        }
+        for (int j = 0; j < N + 1; j++) { dp[i][j] = new int64_t[M + 1]; }
     }
 
     // 数组初始化
@@ -164,7 +152,6 @@ int64_t Solution::intPartition() {
                     // 第i个数字小于总和
 
                     dp[i][j][k] = dp[i - 1][j][k] + dp[i - 1][j - 1][k - i];
-
                 } else {
                     // 第i个数字大于总和
 
@@ -177,9 +164,7 @@ int64_t Solution::intPartition() {
     ans = dp[M][N][M];
     // Deallocate memory
     for (int i = 0; i < M + 1; i++) {
-        for (int j = 0; j < N + 1; j++) {
-            delete[] dp[i][j];
-        }
+        for (int j = 0; j < N + 1; j++) { delete[] dp[i][j]; }
         delete[] dp[i];
     }
     delete[] dp;
@@ -200,4 +185,54 @@ int64_t Solution::intPartition() {
     return ans;
 }
 
-}  // namespace leetcode
+int Solution::maxProfit(vector<int> &prices) {
+    // 采用动态规划的方式dp[i][j],i表示第i天，j表示持有股票的状态
+    // j共有两种情形
+    int n = prices.size();
+    vector<vector<int>> dp(n + 1, vector<int>(2));
+    // 先进行初始化
+    dp[0][0] = 0;
+    dp[0][1] = -prices[0];
+
+    for (int i = 1; i < n; i++) {
+        dp[i][0] = std::max(dp[i - 1][0], dp[i - 1][1] + prices[i]);
+        // 区别于可以进行多次交易的递推公式
+        dp[i][1] = std::max(dp[i - 1][1], -prices[i]);
+    }
+    return dp[n - 1][0];
+}
+
+int Solution::maxProfit_2(vector<int> &prices) {
+    int n = prices.size();
+    vector<vector<int>> dp(n + 1, vector<int>(2));
+    dp[0][0] = 0;
+    dp[0][1] = -prices[0];
+    for (int i = 1; i < n; i++) {
+        dp[i][0] = std::max(dp[i - 1][0], dp[i - 1][1] + prices[i]);
+        dp[i][1] = std::max(dp[i - 1][1], dp[i - 1][0] - prices[i]);
+    }
+    return dp[n - 1][0];
+}
+
+
+int Solution::maxProfit_3(vector<int> &prices) {
+    int n = prices.size();
+    int K = 2;
+    vector<vector<vector<int>>> dp(n + 1, vector<vector<int>>(2 + 1, vector<int>(2)));
+    // 初始化dp Table,不管交易次数，第一天持有股票利润为-prices[0],不持有股票为0
+    for (int k = 0; k < K + 1; k++) {
+        dp[0][k][0] = 0;
+        dp[0][k][1] = -prices[0];
+    }
+
+    for (int i = 1; i < n; i++) {
+        for (int k = K + 1; k >= 1; k--) {
+            // 买入卖出算一次交易，这里只针对买入计算交易次数
+            dp[i][k][0] = std::max(dp[i - 1][k][0], dp[i - 1][k][1] + prices[i]);
+            dp[i][k][1] = std::max(dp[i - 1][k][1], dp[i - 1][k - 1][0] - prices[i]);
+        }
+    }
+    return dp[n - 1][K][0];
+}
+
+}// namespace leetcode
