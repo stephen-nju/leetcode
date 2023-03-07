@@ -32,7 +32,7 @@ bool Solution::isMatch(string s, string p) {
     int m = s.size();
     int n = p.size();
     // bool dp[m][n];
-    vector<vector<bool>> dp;
+    vector<vector<bool> > dp;
     dp[0][0] = true;
     // 初始化数组
     for (int i = 1; i < m + 1; i++) { dp[i][0] = false; }
@@ -194,7 +194,7 @@ int Solution::maxProfit(vector<int> &prices) {
     // 采用动态规划的方式dp[i][j],i表示第i天，j表示持有股票的状态
     // j共有两种情形
     int n = prices.size();
-    vector<vector<int>> dp(n + 1, vector<int>(2));
+    vector<vector<int> > dp(n + 1, vector<int>(2));
     // 先进行初始化
     dp[0][0] = 0;
     dp[0][1] = -prices[0];
@@ -209,7 +209,7 @@ int Solution::maxProfit(vector<int> &prices) {
 
 int Solution::maxProfit_2(vector<int> &prices) {
     int n = prices.size();
-    vector<vector<int>> dp(n + 1, vector<int>(2));
+    vector<vector<int> > dp(n + 1, vector<int>(2));
     dp[0][0] = 0;
     dp[0][1] = -prices[0];
     for (int i = 1; i < n; i++) {
@@ -223,7 +223,7 @@ int Solution::maxProfit_2(vector<int> &prices) {
 int Solution::maxProfit_3(vector<int> &prices) {
     int n = prices.size();
     int K = 2;
-    vector<vector<vector<int>>> dp(n + 1, vector<vector<int>>(2 + 1, vector<int>(2)));
+    vector<vector<vector<int> > > dp(n + 1, vector<vector<int> >(2 + 1, vector<int>(2)));
     // 初始化dp Table,不管交易次数，第一天持有股票利润为-prices[0],不持有股票为0
     for (int k = 0; k < K + 1; k++) {
         dp[0][k][0] = 0;
@@ -240,22 +240,36 @@ int Solution::maxProfit_3(vector<int> &prices) {
 }
 
 
-void backtracking(int n, int k, int startIndex, vector<vector<int>> &result, vector<int> &path) {
-    if (path.size() == k) {
-        result.push_back(path);
+/**
+ * Return an array of arrays of size *returnSize.
+ * The sizes of the arrays are returned as *returnColumnSizes array.
+ * Note: Both returned array and *columnSizes array must be malloced, assume caller calls free().
+ */
+void backtracking(int cur, int n, int k, int **ans, int ans_size, int *temp, int temp_size) {
+    if (temp_size == k) {
+        int *tmp = (int *)malloc(sizeof(int) * (k + 1));
+        for (int i = 0; i < k; i++) { tmp[i] = temp[i]; }
+        ans[ans_size++] = tmp;
         return;
     }
-    for (int i = startIndex; i <= n; i++) {
-        path.push_back(i);// 处理节点
-        backtracking(n, k, i + 1,result,path);// 递归
-        path.pop_back();// 回溯，撤销处理的节点
+    for(int i=cur;i<n;i++){
+    temp[temp_size++] = cur;
+    printf("%d",cur);
+    backtracking(i+1, n, k, ans, ans_size, temp, temp_size);
+    temp_size--;
     }
 }
-vector<vector<int> > Solution::combine(int n, int k) {
-    vector<vector<int> > result;
-    vector<int> path;
-    backtracking(n, k, 1, result, path);
-    return result;
+
+int **Solution::combine(int n, int k, int *returnSize, int **returnColumnSizes) {
+    int **ans = (int **)malloc(sizeof(int *) * 10001);
+    int *temp = (int *)malloc(sizeof(int) * (k + 1));
+    int ans_size = 0;
+    int temp_size = 0;
+    backtracking(1, n, k, ans, ans_size, temp, temp_size);
+    *returnSize = ans_size;
+    *returnColumnSizes = (int *)malloc(sizeof(int) * ans_size);
+    for (int i = 0; i < ans_size; i++) { (*returnColumnSizes)[i] = k; }
+    return ans;
 }
 
 

@@ -42,7 +42,7 @@ class Solution
     int maxProfit_3(vector<int> &prices);
 
     // 77.组合
-    vector<vector<int> > combine(int n, int k);
+    int **combine(int n, int k, int *returnSize, int **returnColumnSizes);
 
   private:
     void quickSort(int arr[], int left, int right);
