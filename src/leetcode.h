@@ -44,6 +44,12 @@ class Solution
     // 77.组合
     vector<vector<int> > combine(int n, int k);
 
+    // 216. 组合总和 III
+    vector<vector<int>> combinationSum3(int k, int n);
+
+    // 17. 电话号码的字母组合
+    vector<string> letterCombinations(string digits);
+
   private:
     void quickSort(int arr[], int left, int right);
 };
