@@ -2,6 +2,7 @@
 #include "leetcode.h"
 
 #include <cstdlib>
+#include <numeric>
 namespace leetcode {
 
 int Solution::minDistance(string word1, string word2) {
@@ -247,14 +248,61 @@ void backtracking(int n, int k, int startIndex, vector<vector<int>> &result, vec
     }
     for (int i = startIndex; i <= n; i++) {
         path.push_back(i);// 处理节点
-        backtracking(n, k, i + 1,result,path);// 递归
+        backtracking(n, k, i + 1, result, path);// 递归
         path.pop_back();// 回溯，撤销处理的节点
     }
 }
-vector<vector<int> > Solution::combine(int n, int k) {
-    vector<vector<int> > result;
+vector<vector<int>> Solution::combine(int n, int k) {
+    vector<vector<int>> result;
     vector<int> path;
     backtracking(n, k, 1, result, path);
+    return result;
+}
+
+void backtracking_combination_sum3(int n, int k, int start, vector<vector<int>> &result, vector<int> &stack) {
+    if (stack.size() == k && std::accumulate(stack.begin(), stack.end(), 0) == n) {
+        result.push_back(stack);
+        return;
+    }
+    for (int i = start; i <= 9; i++) {
+        stack.push_back(i);
+        backtracking_combination_sum3(n, k, i + 1, result, stack);
+        stack.pop_back();
+    }
+}
+
+vector<vector<int>> Solution::combinationSum3(int k, int n) {
+    vector<vector<int>> result;
+    vector<int> stack;
+    backtracking_combination_sum3(n, k, 1, result, stack);
+    return result;
+}
+void backtracking_letter_combination(int start,
+  string &digits,
+  vector<string> &result,
+  string &stack,
+  string letters_map[10]) {
+    if (stack.size() == digits.size()) {
+        result.push_back(stack);
+        return;
+    }
+    int digit = digits[start] - '0';
+    string letters = letters_map[digit];
+    for (int j = 0; j < letters.size(); j++) {
+        stack.push_back(letters[j]);
+        backtracking_letter_combination(start + 1, digits, result, stack, letters_map);
+        stack.pop_back();
+    }
+}
+
+vector<string> Solution::letterCombinations(string digits) {
+    vector<string> result;
+
+    if (digits.size() == 0) return result;
+    string letters_map[10] = { "", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz" };
+    int n = digits.size();
+    string stack;
+    backtracking_letter_combination(0, digits, result, stack, letters_map);
     return result;
 }
 
