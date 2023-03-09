@@ -51,7 +51,6 @@ class Solution
     vector<string> letterCombinations(string digits);
 
     // 39. 组合总和
-
     vector<vector<int>> combinationSum(vector<int> &candidates, int target);
 
   private:

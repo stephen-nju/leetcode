@@ -22,8 +22,6 @@ int main(int argc, char const *argv[]) {
     int n = 4, k = 2;
     int *return_size = (int *)malloc(sizeof(int));
     int **return_column_size = (int **)malloc(sizeof(int *));
-    solution->combine(n, k, return_size, return_column_size);
-
 
     return 0;
 }

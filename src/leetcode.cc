@@ -306,5 +306,43 @@ vector<string> Solution::letterCombinations(string digits) {
     return result;
 }
 
+void backtracking_combination_sum(vector<int> &candidate,
+  int target,
+  int begin,
+  vector<vector<int>> &result,
+  vector<int> &stack) {
+    if (target == 0) {
+        result.push_back(stack);
+        return;
+    }
+    if (target < 0) return;
+    // 会产生排列结果，例如[[2,2,2,2],[2,3,3],[3,2,3],[3,3,2],[3,5],[5,3]]
+    // for (int i : candidate) {
+    //     stack.push_back(i);
+    //     target -= i;
+    //     backtracking_combination_sum(candidate, target, result, stack);
+    //     // 回溯
+    //     target += i;
+    //     stack.pop_back();
+    // }
+    // 为避免排列结果出现，需要设置begin，不能再从头开始
+    for (int i = begin; i < candidate.size(); i++) {
+        stack.push_back(candidate[i]);
+        target -= candidate[i];
+        backtracking_combination_sum(candidate, target, i, result, stack);
+        // 回溯
+        target += candidate[i];
+        stack.pop_back();
+    }
+}
+
+
+vector<vector<int>> Solution::combinationSum(vector<int> &candidates, int target) {
+    vector<vector<int>> result;
+    vector<int> stack;
+    backtracking_combination_sum(candidates, target, 0, result, stack);
+    return result;
+}
+
 
 }// namespace leetcode
