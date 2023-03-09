@@ -3,13 +3,16 @@
 
 #include <cstdlib>
 #include <numeric>
+#include <utility>
+using std::pair;
+
 namespace leetcode {
 
 int Solution::minDistance(string word1, string word2) {
     int distance = 0;
-    int m = word1.size();
-    int n = word2.size();
-    int **dp = (int **)malloc(sizeof(int *) * (m + 1));
+    int m        = word1.size();
+    int n        = word2.size();
+    int **dp     = (int **)malloc(sizeof(int *) * (m + 1));
     for (int i = 0; i < m + 1; i++) { dp[i] = (int *)malloc(sizeof(int *) * (n + 1)); }
     // vector<vector<int>> dp;
     for (int i = 0; i <= m; i++) { dp[i][0] = i; }
@@ -71,9 +74,9 @@ bool Solution::isMatch(string s, string p) {
 int maxDepth(TreeNode *root, int *diameter) {
     if (root == nullptr) return 0;
 
-    int left_depth = maxDepth(root->left, diameter);
+    int left_depth  = maxDepth(root->left, diameter);
     int right_depth = maxDepth(root->right, diameter);
-    *diameter = std::max(right_depth + left_depth, *diameter);
+    *diameter       = std::max(right_depth + left_depth, *diameter);
     return std::max(left_depth, right_depth) + 1;
 }
 
@@ -87,7 +90,7 @@ int Solution::diameterOfBinaryTree(TreeNode *root) {
 // 快排
 inline void swap(int arr[], int x, int y) {
     int temp;
-    temp = arr[x];
+    temp   = arr[x];
     arr[x] = arr[y];
     arr[y] = temp;
 }
@@ -95,7 +98,7 @@ inline void swap(int arr[], int x, int y) {
 int partition(int arr[], int left, int right) {
     // 随机选择pivot
     int pivot_index = left + rand() % (right - left + 1);
-    int pivot = arr[pivot_index];
+    int pivot       = arr[pivot_index];
     swap(arr, pivot_index, right);
     int low = 0, high = right - 1;
     while (low <= high) {
@@ -278,15 +281,15 @@ vector<vector<int>> Solution::combinationSum3(int k, int n) {
     return result;
 }
 void backtracking_letter_combination(int start,
-  string &digits,
-  vector<string> &result,
-  string &stack,
-  string letters_map[10]) {
+                                     string &digits,
+                                     vector<string> &result,
+                                     string &stack,
+                                     string letters_map[10]) {
     if (stack.size() == digits.size()) {
         result.push_back(stack);
         return;
     }
-    int digit = digits[start] - '0';
+    int digit      = digits[start] - '0';
     string letters = letters_map[digit];
     for (int j = 0; j < letters.size(); j++) {
         stack.push_back(letters[j]);
@@ -300,17 +303,17 @@ vector<string> Solution::letterCombinations(string digits) {
 
     if (digits.size() == 0) return result;
     string letters_map[10] = { "", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz" };
-    int n = digits.size();
+    int n                  = digits.size();
     string stack;
     backtracking_letter_combination(0, digits, result, stack, letters_map);
     return result;
 }
 
 void backtracking_combination_sum(vector<int> &candidate,
-  int target,
-  int begin,
-  vector<vector<int>> &result,
-  vector<int> &stack) {
+                                  int target,
+                                  int begin,
+                                  vector<vector<int>> &result,
+                                  vector<int> &stack) {
     if (target == 0) {
         result.push_back(stack);
         return;
@@ -341,6 +344,56 @@ vector<vector<int>> Solution::combinationSum(vector<int> &candidates, int target
     vector<vector<int>> result;
     vector<int> stack;
     backtracking_combination_sum(candidates, target, 0, result, stack);
+    return result;
+}
+
+void backtracking_combination_sum_2(vector<pair<int, int>> &freq,
+                                    int pos,
+                                    int target,
+                                    vector<vector<int>> &result,
+                                    vector<int> &stack) {
+    if (target == 0) {
+        result.push_back(stack);
+        return;
+    }
+    // 考虑边界条件需要考虑清楚，不然容易死循环
+    if (target < 0 || pos == freq.size()) return;
+
+    // 不选择当前数字
+    backtracking_combination_sum_2(freq, pos + 1, target, result, stack);
+
+
+    // 选择当前数字，先求可以最多选多少次
+
+    int most = std::min(target / freq[pos].first, freq[pos].second);
+    for (int i = 1; i <= most; i++) {
+        stack.push_back(freq[pos].first);
+        target -= freq[pos].first;
+        backtracking_combination_sum_2(freq, pos + 1, target, result, stack);
+    }
+    for (int j = 1; j <= most; j++) {
+        // target 回溯
+        target += freq[pos].first;
+        // stack 回溯
+        stack.pop_back();
+    }
+}
+
+vector<vector<int>> Solution::combinationSum2(vector<int> &candidates, int target) {
+    // 方案一：考虑如何在递归的过程中进行去重
+    // 方案二：先将candidates进行分组，然后再回溯
+    vector<vector<int>> result;
+    vector<int> stack;
+    std::sort(candidates.begin(), candidates.end());
+    vector<pair<int, int>> freq;
+    for (int num : candidates) {
+        if (freq.empty() || num != freq.back().first) {
+            freq.emplace_back(num, 1);
+        } else {
+            ++freq.back().second;
+        }
+    }
+    backtracking_combination_sum_2(freq, 0, target, result, stack);
     return result;
 }
 

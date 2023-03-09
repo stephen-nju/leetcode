@@ -4,9 +4,12 @@ UseTab: Never
 ColumnLimit: 120
 Language: Cpp 
 
+AlignAfterOpenBracket: true
+# 设置连续参数对齐方式。如果设置为 true，则会将连续的参数对齐
+AlignConsecutiveAssignments: true
+# 设置连续参数对齐方式。如果设置为 true，则会将连续的参数对齐
+
 AccessModifierOffset: -2
-AlignAfterOpenBracket: DontAlign
-AlignConsecutiveAssignments: false
 AlignConsecutiveDeclarations: false
 AlignEscapedNewlines: Left
 AlignOperands: true

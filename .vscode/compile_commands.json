@@ -1,0 +1,11 @@
+[
+{
+  "directory": "/workspaces/leetcode",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-o", "build/.objs/main/linux/x86_64/release/src/main.cc.o", "src/main.cc"],
+  "file": "src/main.cc"
+},
+{
+  "directory": "/workspaces/leetcode",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-o", "build/.objs/main/linux/x86_64/release/src/leetcode.cc.o", "src/leetcode.cc"],
+  "file": "src/leetcode.cc"
+}]

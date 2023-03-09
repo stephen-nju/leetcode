@@ -19,9 +19,9 @@ int main(int argc, char const *argv[]) {
     // std::string b = "bc";
     // int c = solution->minDistance(a, b);
     // printf("%d\n", c);
-    int n = 4, k = 2;
-    int *return_size = (int *)malloc(sizeof(int));
-    int **return_column_size = (int **)malloc(sizeof(int *));
+    vector<int> candiate{ 10, 1, 2, 7, 6, 1, 5 };
+    int target            = 8;
+    vector<vector<int>> o = solution->combinationSum2(candiate, target);
 
     return 0;
 }

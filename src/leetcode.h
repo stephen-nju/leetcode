@@ -52,6 +52,8 @@ class Solution
 
     // 39. 组合总和
     vector<vector<int>> combinationSum(vector<int> &candidates, int target);
+    // 40. 组合总和 II
+    vector<vector<int>> combinationSum2(vector<int> &candidates, int target);
 
   private:
     void quickSort(int arr[], int left, int right);
