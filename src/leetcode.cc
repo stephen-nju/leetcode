@@ -429,4 +429,54 @@ vector<vector<string>> Solution::str_partition(string s) {
     return result;
 }
 
+bool is_valid_ip_address(const string &s) {
+    if (s.size() == 0) return false;
+    if (s.size() > 1 && s[0] == '0') { return false; }
+    int num = 0;
+    if (s.size() > 1) {
+        for (int i = 0; i < s.size(); i++) {
+            if (s[i] > '9' || s[i] < '0') { return false; }
+            num = num * 10 + (s[i] - '0');
+            if (num > 255) return false;
+        }
+        // 值不能大于255
+    }
+    return true;
+}
+
+void backtracking_restore_ip_addresses(const string &s, int pos, vector<string> &result, vector<string> &stack) {
+    // 递归的终止条件
+    if (pos >= s.size()) {
+        if (stack.size() == 4) {
+            string o = "";
+            for (int i = 0; i < stack.size() - 1; i++) {
+                o += stack[i];
+                o += ".";
+            }
+            o += stack[stack.size()];
+
+            result.emplace_back(o);
+        }
+        return;
+    }
+
+    for (int i = pos; i < s.size(); i++) {
+        string t = s.substr(pos, i - pos + 1);
+        if (is_valid_ip_address(t)) {
+            stack.emplace_back(t);
+            backtracking_restore_ip_addresses(s, pos + t.size(), result, stack);
+            stack.pop_back();
+        }
+    }
+}
+
+
+vector<string> Solution::restoreIpAddresses(string s) {
+    vector<string> result;
+    vector<string> stack;
+    backtracking_restore_ip_addresses(s, 0, result, stack);
+    return result;
+}
+
+
 }// namespace leetcode

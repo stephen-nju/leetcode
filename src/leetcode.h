@@ -1,4 +1,5 @@
 #ifndef LEET_CODE_H
+
 #define LEET_CODE_H
 #include <algorithm>
 #include <cstdint>
@@ -56,6 +57,8 @@ class Solution
     vector<vector<int>> combinationSum2(vector<int> &candidates, int target);
     // 131. 分割回文串
     vector<vector<string>> str_partition(string s);
+    // 93. 复原 IP 地址
+    vector<string> restoreIpAddresses(string s);
 
   private:
     void quickSort(int arr[], int left, int right);
