@@ -397,5 +397,36 @@ vector<vector<int>> Solution::combinationSum2(vector<int> &candidates, int targe
     return result;
 }
 
+bool is_palindrome(const string &s, int start, int end) {
+    for (int i = start, j = end; i < j; i++, j--) {
+        if (s[i] != s[j]) { return false; }
+    }
+    return true;
+}
+void backtracking_partition(const string &s, int pos, vector<vector<string>> &result, vector<string> &stack) {
+    // 递归的结束条件
+    if (pos >= s.size()) {
+        result.push_back(stack);
+        return;
+    }
+
+    for (int i = pos; i < s.size(); i++) {
+        string t = s.substr(pos, i - pos + 1);
+        if (is_palindrome(t, 0, t.size() - 1)) {
+            // 如果是回文串，我们再开始递归
+            stack.push_back(t);
+            backtracking_partition(s, pos + t.size(), result, stack);
+            stack.pop_back();
+        }
+    }
+}
+
+vector<vector<string>> Solution::str_partition(string s) {
+    vector<vector<string>> result;
+    vector<string> stack;
+
+    backtracking_partition(s, 0, result, stack);
+    return result;
+}
 
 }// namespace leetcode

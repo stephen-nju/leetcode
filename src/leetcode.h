@@ -54,6 +54,8 @@ class Solution
     vector<vector<int>> combinationSum(vector<int> &candidates, int target);
     // 40. 组合总和 II
     vector<vector<int>> combinationSum2(vector<int> &candidates, int target);
+    // 131. 分割回文串
+    vector<vector<string>> str_partition(string s);
 
   private:
     void quickSort(int arr[], int left, int right);

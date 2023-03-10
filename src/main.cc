@@ -19,9 +19,9 @@ int main(int argc, char const *argv[]) {
     // std::string b = "bc";
     // int c = solution->minDistance(a, b);
     // printf("%d\n", c);
-    vector<int> candiate{ 10, 1, 2, 7, 6, 1, 5 };
-    int target            = 8;
-    vector<vector<int>> o = solution->combinationSum2(candiate, target);
+    string s = "aab";
+
+    vector<vector<string>> o = solution->str_partition(s);
 
     return 0;
 }
