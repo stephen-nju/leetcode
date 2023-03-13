@@ -63,6 +63,10 @@ class Solution
     vector<vector<int>> subsets(vector<int> &nums);
     // 90. 子集 II
     vector<vector<int>> subsetsWithDup(vector<int> &nums);
+    // 491. 递增子序列
+    vector<vector<int>> findSubsequences(vector<int> &nums);
+    // 46. 全排列
+    vector<vector<int>> permute(vector<int> &nums);
 
 
   private:

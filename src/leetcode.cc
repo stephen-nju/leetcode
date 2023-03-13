@@ -3,6 +3,7 @@
 
 #include <cstdlib>
 #include <numeric>
+#include <unordered_set>
 #include <utility>
 using std::pair;
 
@@ -535,5 +536,68 @@ vector<vector<int>> Solution::subsetsWithDup(vector<int> &nums) {
     return result;
 }
 
+void backtracking_find_subsequences(vector<int> &nums, int pos, vector<vector<int>> &result, vector<int> &stack) {
+    // 至少需要两个元素
+    if (stack.size() > 1) { result.push_back(stack); }
+
+    std::unordered_set<int> set;
+    for (int i = pos; i < nums.size(); i++) {
+        // 1.递增
+        // 2.去重
+        if (stack.empty()) {
+            if (set.find(nums[i]) == set.end()) {
+                stack.push_back(nums[i]);
+                set.insert(nums[i]);
+                backtracking_find_subsequences(nums, i + 1, result, stack);
+                stack.pop_back();
+            }
+        } else {
+            if (nums[i] >= stack.back()) {
+                if (set.find(nums[i]) == set.end()) {
+                    // 不在集合中
+                    set.insert(nums[i]);
+                    stack.push_back(nums[i]);
+                    backtracking_find_subsequences(nums, i + 1, result, stack);
+                    stack.pop_back();
+                }
+            }
+        }
+        // if (set.find(nums[i]) != set.end()) {
+        //     if (nums[i] >= stack.back()) stack.push_back(nums[i]);
+        //     set.insert(nums[i]);
+        //     backtracking_find_subsequences(nums, i + 1, result, stack);
+        //     stack.pop_back();
+        // }
+    }
+}
+
+vector<vector<int>> Solution::findSubsequences(vector<int> &nums) {
+    vector<vector<int>> result;
+    vector<int> stack;
+    backtracking_find_subsequences(nums, 0, result, stack);
+    return result;
+}
+
+void backtracking_permute(vector<int> nums, vector<bool> &used, vector<vector<int>> &result, vector<int> &stack) {
+    if (stack.size() == nums.size()) result.push_back(stack);
+
+    for (int i = 0; i < nums.size(); i++) {
+        if (used[i] == false) {
+            stack.push_back(nums[i]);
+            used[i] == true;
+            backtracking_permute(nums, used, result, stack);
+            stack.pop_back();
+            used[i] = false;
+        }
+    }
+}
+
+vector<vector<int>> Solution::permute(vector<int> &nums) {
+    vector<vector<int>> result;
+    vector<int> stack;
+    vector<bool> used(nums.size(), false);
+    backtracking_permute(nums, used, result, stack);
+    return result;
+}
 
 }// namespace leetcode
