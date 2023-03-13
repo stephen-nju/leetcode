@@ -280,6 +280,7 @@ vector<vector<int>> Solution::combinationSum3(int k, int n) {
     backtracking_combination_sum3(n, k, 1, result, stack);
     return result;
 }
+
 void backtracking_letter_combination(int start,
                                      string &digits,
                                      vector<string> &result,
@@ -328,7 +329,7 @@ void backtracking_combination_sum(vector<int> &candidate,
     //     target += i;
     //     stack.pop_back();
     // }
-    // 为避免排列结果出现，需要设置begin，不能再从头开始
+    // 为避免出现排列结果，需要设置begin，不能再从头开始
     for (int i = begin; i < candidate.size(); i++) {
         stack.push_back(candidate[i]);
         target -= candidate[i];
@@ -475,6 +476,62 @@ vector<string> Solution::restoreIpAddresses(string s) {
     vector<string> result;
     vector<string> stack;
     backtracking_restore_ip_addresses(s, 0, result, stack);
+    return result;
+}
+
+
+void backtracking_subsets(vector<int> &nums, int pos, vector<vector<int>> &result, vector<int> &stack) {
+    result.push_back(stack);
+    for (int i = pos; i < nums.size(); i++) {
+        stack.push_back(nums[i]);
+        backtracking_subsets(nums, i + 1, result, stack);
+        stack.pop_back();
+    }
+}
+
+vector<vector<int>> Solution::subsets(vector<int> &nums) {
+    vector<vector<int>> result;
+    vector<int> stack;
+    int pos = 0;
+    backtracking_subsets(nums, pos, result, stack);
+
+    return result;
+}
+
+
+void backtracking_subsets_dup(vector<int> &nums,
+                              int pos,
+                              vector<vector<int>> &result,
+                              vector<bool> &used,
+                              vector<int> stack) {
+    result.push_back(stack);
+    for (int i = pos; i < nums.size(); i++) {
+        // 保证再递归在同一深度的位置，不能采样相同的数据，如果数据相同，势必会出现重复的结果（可以这么理解，如果i-1==i,那么第i-1次
+        // 的递归结果必然包含在第i的递归结果中）
+        // used[i - 1] == true，说明同一树支candidates[i - 1]使用过
+        // used[i - 1] == false，说明同一树层candidates[i - 1]使用过
+        if (i > 0 && nums[i] == nums[i - 1] && used[i - 1] == false) { continue; }
+        stack.push_back(nums[i]);
+        used[i] = true;
+        backtracking_subsets_dup(nums, i + 1, result, used, stack);
+        used[i] = false;
+        stack.pop_back();
+    }
+}
+
+
+vector<vector<int>> Solution::subsetsWithDup(vector<int> &nums) {
+    // 采用used 数组来进行去重，不同于先进行分组，再来递归
+    vector<vector<int>> result;
+    vector<int> stack;
+    // 采用used数组,初始化为false
+    vector<bool> used(nums.size(), false);
+
+    // 排序
+    std::sort(nums.begin(), nums.end());
+    backtracking_subsets_dup(nums, 0, result, used, stack);
+
+
     return result;
 }
 

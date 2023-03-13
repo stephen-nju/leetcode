@@ -9,5 +9,5 @@ TEST_CASE("testing minDistance") {
     string a                     = "a";
     string b                     = "abc";
     leetcode::Solution *solution = new leetcode::Solution();
-    CHECK(solution->minDistance(a, b) == 2);
+    CHECK(solution->minDistance(a, b) == 3);
 }

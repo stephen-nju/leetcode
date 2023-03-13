@@ -59,6 +59,11 @@ class Solution
     vector<vector<string>> str_partition(string s);
     // 93. 复原 IP 地址
     vector<string> restoreIpAddresses(string s);
+    // 78. 子集
+    vector<vector<int>> subsets(vector<int> &nums);
+    // 90. 子集 II
+    vector<vector<int>> subsetsWithDup(vector<int> &nums);
+
 
   private:
     void quickSort(int arr[], int left, int right);
