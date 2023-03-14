@@ -3,10 +3,12 @@
 
 #include <cstdlib>
 #include <numeric>
+#include <queue>
+#include <stack>
+#include <unordered_map>
 #include <unordered_set>
 #include <utility>
 using std::pair;
-
 namespace leetcode {
 
 int Solution::minDistance(string word1, string word2) {
@@ -510,7 +512,7 @@ void backtracking_subsets_dup(vector<int> &nums,
         // 保证再递归在同一深度的位置，不能采样相同的数据，如果数据相同，势必会出现重复的结果（可以这么理解，如果i-1==i,那么第i-1次
         // 的递归结果必然包含在第i的递归结果中）
         // used[i - 1] == true，说明同一树支candidates[i - 1]使用过
-        // used[i - 1] == false，说明同一树层candidates[i - 1]使用过
+        // used[i - 1] == false，说明同一树层candidates[i - 1]使用过,
         if (i > 0 && nums[i] == nums[i - 1] && used[i - 1] == false) { continue; }
         stack.push_back(nums[i]);
         used[i] = true;
@@ -599,5 +601,81 @@ vector<vector<int>> Solution::permute(vector<int> &nums) {
     backtracking_permute(nums, used, result, stack);
     return result;
 }
+
+
+void backtracking_permute_unique(vector<int> &nums,
+                                 vector<bool> &used,
+                                 vector<vector<int>> &result,
+                                 vector<int> &stack) {
+    if (stack.size() == nums.size()) {
+        result.push_back(stack);
+        return;
+    }
+    for (int i = 0; i < nums.size(); i++) {
+        if (stack.empty()) {
+            if (used[i] == false) {
+                stack.push_back(nums[i]);
+                used[i] = true;
+                backtracking_permute_unique(nums, used, result, stack);
+                stack.pop_back();
+                used[i] = false;
+            }
+        } else {
+            if (used[i] == false) {
+                if (i == 0 || nums[i] != nums[i - 1] || used[i - 1] == false) {
+                    // 注意i==0的位置，需要优先判断，不然会出现数组越界的问题
+                    stack.push_back(nums[i]);
+                    used[i] = true;
+                    backtracking_permute_unique(nums, used, result, stack);
+                    stack.pop_back();
+                    used[i] = false;
+                }
+            }
+        }
+    }
+}
+
+vector<vector<int>> Solution::permuteUnique(vector<int> &nums) {
+    vector<vector<int>> result;
+    vector<int> stack;
+    vector<bool> used(nums.size(), false);
+    std::sort(nums.begin(), nums.end());
+    backtracking_permute_unique(nums, used, result, stack);
+    return result;
+}
+
+vector<string> hierholzer_find_itinerary(vector<vector<string>> &tickets, string &vertex) {
+    vector<string> result;
+    // 先构建图(图的存储方案)
+    std::unordered_map<string, std::priority_queue<string, vector<string>, std::greater<string>>> g;
+    for (auto t : tickets) { g[t[0]].push(t[1]); }
+
+    std::stack<string> cpath;
+    std::stack<string> epath;
+    cpath.push(vertex);
+    while (!cpath.empty()) {
+        string u = cpath.top();
+        if (g[u].empty()) {
+            epath.push(u);
+            cpath.pop();
+        } else {
+            cpath.push(g[u].top());
+            g[u].pop();
+        }
+    }
+    while (!epath.empty()) {
+        result.push_back(epath.top());
+        epath.pop();
+    }
+    return result;
+}
+
+vector<string> Solution::findItinerary(vector<vector<string>> &tickets) {
+    // 注意区分dfs+回溯 与 Hierholzer算法的区别
+    // Hierholzer算法：具体参考 https://slaystudy.com/hierholzers-algorithm/
+    string start = "JFK";
+    return hierholzer_find_itinerary(tickets, start);
+}
+
 
 }// namespace leetcode
