@@ -2,11 +2,14 @@
 #include "leetcode.h"
 
 #include <cstdlib>
+#include <functional>
 #include <numeric>
+#include <queue>
+#include <stack>
+#include <unordered_map>
 #include <unordered_set>
 #include <utility>
 using std::pair;
-
 namespace leetcode {
 
 int Solution::minDistance(string word1, string word2) {
@@ -510,7 +513,7 @@ void backtracking_subsets_dup(vector<int> &nums,
         // 保证再递归在同一深度的位置，不能采样相同的数据，如果数据相同，势必会出现重复的结果（可以这么理解，如果i-1==i,那么第i-1次
         // 的递归结果必然包含在第i的递归结果中）
         // used[i - 1] == true，说明同一树支candidates[i - 1]使用过
-        // used[i - 1] == false，说明同一树层candidates[i - 1]使用过
+        // used[i - 1] == false，说明同一树层candidates[i - 1]使用过,
         if (i > 0 && nums[i] == nums[i - 1] && used[i - 1] == false) { continue; }
         stack.push_back(nums[i]);
         used[i] = true;
@@ -598,6 +601,184 @@ vector<vector<int>> Solution::permute(vector<int> &nums) {
     vector<bool> used(nums.size(), false);
     backtracking_permute(nums, used, result, stack);
     return result;
+}
+
+
+void backtracking_permute_unique(vector<int> &nums,
+                                 vector<bool> &used,
+                                 vector<vector<int>> &result,
+                                 vector<int> &stack) {
+    if (stack.size() == nums.size()) {
+        result.push_back(stack);
+        return;
+    }
+    for (int i = 0; i < nums.size(); i++) {
+        if (stack.empty()) {
+            if (used[i] == false) {
+                stack.push_back(nums[i]);
+                used[i] = true;
+                backtracking_permute_unique(nums, used, result, stack);
+                stack.pop_back();
+                used[i] = false;
+            }
+        } else {
+            if (used[i] == false) {
+                if (i == 0 || nums[i] != nums[i - 1] || used[i - 1] == false) {
+                    // 注意i==0的位置，需要优先判断，不然会出现数组越界的问题
+                    stack.push_back(nums[i]);
+                    used[i] = true;
+                    backtracking_permute_unique(nums, used, result, stack);
+                    stack.pop_back();
+                    used[i] = false;
+                }
+            }
+        }
+    }
+}
+
+vector<vector<int>> Solution::permuteUnique(vector<int> &nums) {
+    vector<vector<int>> result;
+    vector<int> stack;
+    vector<bool> used(nums.size(), false);
+    std::sort(nums.begin(), nums.end());
+    backtracking_permute_unique(nums, used, result, stack);
+    return result;
+}
+
+vector<string> hierholzer_find_itinerary(vector<vector<string>> &tickets, string &vertex) {
+    vector<string> result;
+    // 先构建图(图的存储方案)
+    std::unordered_map<string, std::priority_queue<string, vector<string>, std::greater<string>>> g;
+    for (auto t : tickets) { g[t[0]].push(t[1]); }
+
+    std::stack<string> cpath;
+    std::stack<string> epath;
+    cpath.push(vertex);
+    while (!cpath.empty()) {
+        string u = cpath.top();
+        if (g[u].empty()) {
+            epath.push(u);
+            cpath.pop();
+        } else {
+            cpath.push(g[u].top());
+            g[u].pop();
+        }
+    }
+    while (!epath.empty()) {
+        result.push_back(epath.top());
+        epath.pop();
+    }
+    return result;
+}
+
+vector<string> Solution::findItinerary(vector<vector<string>> &tickets) {
+    // 注意区分dfs+回溯 与 Hierholzer算法的区别
+    // Hierholzer算法：具体参考 https://slaystudy.com/hierholzers-algorithm/
+    string start = "JFK";
+    return hierholzer_find_itinerary(tickets, start);
+}
+
+
+vector<vector<string>> Solution::solveNQueens(int n) {
+    vector<vector<string>> result;
+    // 用来记录第i行皇后在哪一列
+    vector<int> stack(n, 0);
+
+    std::function<bool(int, int)> is_valid = [&](int row, int column) {
+        // 第零行随便放
+        if (row == 0) return true;
+        for (int R = 0; R < row; R++) {
+            int C = stack[R];
+            // 不能处在同一列
+            if (column == C) return false;
+            // 不能再同一斜列
+            if ((row + column) == (R + C) || (R - C) == (row - column)) { return false; }
+        }
+        return true;
+    };
+
+    std::function<void(int)> dfs_solve_n_queens = [&](int row) {
+        // row 表示行，column表示列
+        if (row == n) {
+            // 所有皇后已经放好,返回条件
+            vector<string> board(n);
+            for (int i = 0; i < stack.size(); ++i) {
+                // 注意单引号和双引号的区别
+                board[i] = string(stack[i], '.') + 'Q' + string(n - 1 - stack[i], '.');
+            }
+            result.emplace_back(board);
+        }
+        for (int c = 0; c < n; ++c) {
+            // 判断当前位置第row行，第c列能否放置皇后
+            if (is_valid(row, c)) {
+                stack[row] = c;
+                // 如果找到合适的位置，row才会加1
+                dfs_solve_n_queens(row + 1);
+            }
+            // 若当前位置未找到有效位置，row无法递增，也就是无法递归，result为初始化结果
+        }
+    };
+    dfs_solve_n_queens(0);
+
+    return result;
+}
+
+void Solution::solveSudoku(vector<vector<char>> &board) {
+    // 注意容易超时
+
+    // 用于判断当前位置填入的数是否有效
+    std::function<bool(int row, int column, char c)> is_valid = [&](int row, int column, char c) {
+        // 先判断是数字0-9
+        if ((c - '0') <= 9 && (c - '0') > 0) {
+            // 行
+            for (int n = 0; n < board[row].size(); ++n) {
+                if (c == board[row][n]) { return false; }
+            }
+            // 列
+            for (int n = 0; n < board.size(); n++) {
+                if (c == board[n][column]) { return false; }
+            }
+            // 3*3的正方形中只能出现一次
+            // 先求解行列的范围
+            int R = (row / 3) * 3;
+            int C = (column / 3) * 3;
+            for (int i = R; i < R + 3; i++) {
+                for (int j = C; j < C + 3; j++) {
+                    if (c == board[i][j]) return false;
+                }
+            }
+            return true;
+
+        } else {
+            return false;
+        }
+    };
+
+    std::function<bool(int row, int column)> backtracking_solve_sudoku = [&](int row, int column) {
+        char value[] = "123456789";
+        if(column==board[0].size()){
+            // 需要注意便利顺序
+            row++;
+            column=0;
+            if(row==board.size()){
+                return true;
+            }
+        }
+        if(board[row][column]!='.'){
+            // 直接跳过当前位置,前进一位
+            return backtracking_solve_sudoku(row,column+1);
+        }
+        for (int i = 0; i < 9; i++) {
+            if (is_valid(row, column, value[i])) {
+                board[row][column] = value[i];
+                if (backtracking_solve_sudoku(row, column + 1)) return true;
+                // 错误需要回溯
+                board[row][column] = '.';
+            }
+        }
+        return false;
+    };
+    backtracking_solve_sudoku(0, 0);
 }
 
 }// namespace leetcode

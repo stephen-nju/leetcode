@@ -1,3 +1,11 @@
+/*
+ * @Author: zhubin
+ * @Date: 2023-02-27 14:37:37
+ * @FilePath: \leetcode\src\leetcode.h
+ * @Description:
+ *
+ * Copyright (c) 2023 by ${git_name}, All Rights Reserved.
+ */
 #ifndef LEET_CODE_H
 
 #define LEET_CODE_H
@@ -67,7 +75,14 @@ class Solution
     vector<vector<int>> findSubsequences(vector<int> &nums);
     // 46. 全排列
     vector<vector<int>> permute(vector<int> &nums);
-
+    //     47. 全排列 II
+    vector<vector<int>> permuteUnique(vector<int> &nums);
+    // 332. 重新安排行程(Hierholzer 算法)
+    vector<string> findItinerary(vector<vector<string>> &tickets);
+    // 51. N 皇后
+    vector<vector<string>> solveNQueens(int n);
+    // 37. 解数独
+    void solveSudoku(vector<vector<char>> &board);
 
   private:
     void quickSort(int arr[], int left, int right);

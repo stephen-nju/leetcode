@@ -1,11 +1,16 @@
 [
 {
-  "directory": "/workspaces/leetcode",
-  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-g", "-O0", "-o", "build/.objs/test/linux/x86_64/debug/src/test_leetcode.cc.o", "src/test_leetcode.cc"],
-  "file": "src/test_leetcode.cc"
+  "directory": "e:\\MyProject\\Cpp\\leetcode",
+  "arguments": ["C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.34.31933\\bin\\HostX64\\x64\\cl.exe", "/c", "/nologo", "/O2", "/fp:fast", "/std:c++11", "/EHsc", "/DNDEBUG", "/Fobuild\\.objs\\test\\windows\\x64\\release\\src\\leetcode.cc.obj", "src\\leetcode.cc"],
+  "file": "src\\leetcode.cc"
 },
 {
-  "directory": "/workspaces/leetcode",
-  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-g", "-O0", "-o", "build/.objs/test/linux/x86_64/debug/src/leetcode.cc.o", "src/leetcode.cc"],
-  "file": "src/leetcode.cc"
+  "directory": "e:\\MyProject\\Cpp\\leetcode",
+  "arguments": ["C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.34.31933\\bin\\HostX64\\x64\\cl.exe", "/c", "/nologo", "/O2", "/fp:fast", "/std:c++11", "/EHsc", "/DNDEBUG", "/Fobuild\\.objs\\test\\windows\\x64\\release\\src\\main.cc.obj", "src\\main.cc"],
+  "file": "src\\main.cc"
+},
+{
+  "directory": "e:\\MyProject\\Cpp\\leetcode",
+  "arguments": ["C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.34.31933\\bin\\HostX64\\x64\\cl.exe", "/c", "/nologo", "/O2", "/fp:fast", "/std:c++11", "/EHsc", "/DNDEBUG", "/Fobuild\\.objs\\test\\windows\\x64\\release\\src\\test_leetcode.cc.obj", "src\\test_leetcode.cc"],
+  "file": "src\\test_leetcode.cc"
 }]
