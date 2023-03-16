@@ -756,17 +756,15 @@ void Solution::solveSudoku(vector<vector<char>> &board) {
 
     std::function<bool(int row, int column)> backtracking_solve_sudoku = [&](int row, int column) {
         char value[] = "123456789";
-        if(column==board[0].size()){
+        if (column == board[0].size()) {
             // 需要注意便利顺序
             row++;
-            column=0;
-            if(row==board.size()){
-                return true;
-            }
+            column = 0;
+            if (row == board.size()) { return true; }
         }
-        if(board[row][column]!='.'){
+        if (board[row][column] != '.') {
             // 直接跳过当前位置,前进一位
-            return backtracking_solve_sudoku(row,column+1);
+            return backtracking_solve_sudoku(row, column + 1);
         }
         for (int i = 0; i < 9; i++) {
             if (is_valid(row, column, value[i])) {
@@ -780,5 +778,203 @@ void Solution::solveSudoku(vector<vector<char>> &board) {
     };
     backtracking_solve_sudoku(0, 0);
 }
+
+vector<int> Solution::preorderTraversal(TreeNode *root) {
+    // 递归方式实现
+    vector<int> result;
+    if (root == nullptr) return result;
+    std::function<void(TreeNode *)> dfs = [&](TreeNode *cur) {
+        if (cur == NULL) return;
+        result.emplace_back(cur->val);
+        dfs(cur->left);
+        dfs(cur->right);
+    };
+    dfs(root);
+
+    return result;
+}
+
+vector<int> Solution::inorderTraversal(TreeNode *root) {
+    // 递归式解法
+    // vector<int> result;
+    // if (root == nullptr) return result;
+
+    // std::function<void(TreeNode *)> dfs = [&](TreeNode *cur) {
+    //     // 确定递归的终止条件
+    //     if (cur == nullptr) return;
+    //     dfs(cur->left);
+    //     result.emplace_back(cur->val);
+    //     dfs(cur->right);
+    // };
+
+    // dfs(root);
+    // return result;
+
+    // 迭代式解法
+    vector<int> result;
+    if (root == nullptr) return result;
+    std::stack<TreeNode *> st;
+    // 当前的节点指针
+    TreeNode *cur = root;
+    // 主要原因是数据处理 和数据访问不一致，我们总是从根节点进行访问，但是中序确实先处理左节点
+    // 注意栈的尚未初始化，外层循环需要添加限制项
+    while (!st.empty() || cur != nullptr) {
+        while (cur != nullptr) {
+            // 记录访问路径
+            st.push(cur);
+            cur = cur->left;
+        }
+        // 到达叶节点的时候
+        cur = st.top();
+        // 处理当前节点
+        result.emplace_back(cur->val);
+        st.pop();
+        cur = cur->right;
+    }
+    return result;
+}
+
+vector<int> Solution::postorderTraversal(TreeNode *root) {
+    // 利用栈,采用迭代的方式
+    vector<int> result;
+    if (root == nullptr) return result;
+    std::stack<TreeNode *> st;
+    st.push(root);
+    while (!st.empty()) {
+        TreeNode *top = st.top();
+        result.emplace_back(top->val);
+        st.pop();
+        if (top->left) st.push(top->left);
+        if (top->right) st.push(top->right);
+    }
+
+    std::reverse(result.begin(), result.end());
+    return result;
+}
+
+
+vector<vector<int>> Solution::levelOrder(TreeNode *root) {
+    vector<vector<int>> result;
+    if (root == nullptr) return result;
+    std::queue<TreeNode *> que;
+    que.push(root);
+    while (!que.empty()) {
+        vector<int> path;
+        int num = que.size();
+        // 需要提前计算好que的大小，因为que的size会变化
+        for (int i = 0; i < num; i++) {
+            TreeNode *node = que.front();
+            path.emplace_back(node->val);
+            que.pop();
+            // 非空的时候，添加到队列
+            if (node->left) que.push(node->left);
+            if (node->right) que.push(node->right);
+        }
+        result.emplace_back(path);
+    }
+    return result;
+}
+
+vector<vector<int>> Solution::levelOrderBottom(TreeNode *root) {
+    vector<vector<int>> result;
+    if (root == nullptr) return result;
+    std::queue<TreeNode *> que;
+    que.push(root);
+    while (!que.empty()) {
+        vector<int> path;
+        int num = que.size();
+        // 需要提前计算好que的大小，因为que的size会变化
+        for (int i = 0; i < num; i++) {
+            TreeNode *node = que.front();
+            path.emplace_back(node->val);
+            que.pop();
+            // 非空的时候，添加到队列
+            if (node->left) que.push(node->left);
+            if (node->right) que.push(node->right);
+        }
+        result.emplace_back(path);
+    }
+    std::reverse(result.begin(), result.end());
+    return result;
+}
+
+
+vector<int> Solution::rightSideView(TreeNode *root) {
+    vector<int> result;
+    if (root == nullptr) return result;
+    std::queue<TreeNode *> que;
+    que.push(root);
+    while (!que.empty()) {
+        vector<int> path;
+        int num = que.size();
+        // 需要提前计算好que的大小，因为que的size会变化
+        for (int i = 0; i < num; i++) {
+            TreeNode *node = que.front();
+            path.emplace_back(node->val);
+            que.pop();
+            // 非空的时候，添加到队列
+            if (node->left) que.push(node->left);
+            if (node->right) que.push(node->right);
+        }
+        result.emplace_back(path.back());
+    }
+
+    return result;
+}
+
+vector<double> Solution::averageOfLevels(TreeNode *root) {
+    vector<double> result;
+    if (root == nullptr) return result;
+    std::queue<TreeNode *> que;
+    que.push(root);
+    while (!que.empty()) {
+        double sum = 0;
+        int nums   = que.size();
+        for (int i = 0; i < nums; i++) {
+            TreeNode *node = que.front();
+            sum += node->val;
+            que.pop();
+            if (node->left) que.push(node->left);
+            if (node->right) que.push(node->right);
+        }
+        double average = sum / nums;
+        result.emplace_back(average);
+    }
+    return result;
+}
+
+TreeNode *Solution::invertTree(TreeNode *root) {
+
+    // // 需要考虑清楚终止条件
+    // if (root == nullptr) return root;
+    // std::function<void(TreeNode *)> invert = [&](TreeNode *node) {
+    //     TreeNode *temp = node->left;
+    //     node->left     = node->right;
+    //     node->right    = temp;
+    //     if (node->left) invert(node->left);
+    //     if (node->right) invert(node->right);
+    // };
+    // invert(root);
+
+    // return root;
+
+    // 采用迭代的方式进行尝试
+    if (root == nullptr) return root;
+    std::stack<TreeNode *> st;
+    st.push(root);
+    while (!st.empty()) {
+        TreeNode *node = st.top();
+        TreeNode *temp = node->left;
+        node->left     = node->right;
+        node->right    = temp;
+        st.pop();
+        if (node->right) st.push(node->right);
+        if (node->left) st.push(node->left);
+    }
+    return root;
+}
+
+
+bool Solution::isValidBST(TreeNode *root) {}
 
 }// namespace leetcode

@@ -83,6 +83,29 @@ class Solution
     vector<vector<string>> solveNQueens(int n);
     // 37. 解数独
     void solveSudoku(vector<vector<char>> &board);
+    // ========================================二叉树遍历==========================
+    // 144. 二叉树的前序遍历
+    vector<int> preorderTraversal(TreeNode *root);
+    // 145.⼆叉树的后序遍历
+    vector<int> postorderTraversal(TreeNode *root);
+
+    // 94. 二叉树的中序遍历
+    vector<int> inorderTraversal(TreeNode *root);
+
+    // 102. 二叉树的层序遍历
+    vector<vector<int>> levelOrder(TreeNode *root);
+    // 107. 二叉树的层序遍历 II
+    vector<vector<int>> levelOrderBottom(TreeNode *root);
+    // 199. 二叉树的右视图
+    vector<int> rightSideView(TreeNode *root);
+    // 637. 二叉树的层平均值
+    vector<double> averageOfLevels(TreeNode *root);
+
+    // 226. 翻转二叉树
+    TreeNode *invertTree(TreeNode *root);
+
+    // 98. 验证二叉搜索树
+    bool isValidBST(TreeNode *root);
 
   private:
     void quickSort(int arr[], int left, int right);
