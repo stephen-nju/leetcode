@@ -973,7 +973,27 @@ TreeNode *Solution::invertTree(TreeNode *root) {
     }
     return root;
 }
+bool isSymmetric(TreeNode *root) {
+    if (root == nullptr) return true;
+    // 需要递归判断左右子树是个否相等,核心是后序遍历
+    std::function<bool(TreeNode *, TreeNode *)> dfs_compare = [&](TreeNode *left, TreeNode *right) {
+        if (left == nullptr && right != nullptr)
+            return false;
+        else if (left != nullptr && right == nullptr)
+            return false;
+        else if (left == nullptr && right == nullptr)
+            return true;
+        else if (left->val != right->val)
+            return false;
 
+        bool l = dfs_compare(left->left, right->right);
+        bool r = dfs_compare(left->right, right->left);
+
+        return l && r;
+    };
+
+    return dfs_compare(root->left, root->right);
+}
 
 bool Solution::isValidBST(TreeNode *root) {}
 

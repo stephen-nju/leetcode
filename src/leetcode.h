@@ -104,6 +104,10 @@ class Solution
     // 226. 翻转二叉树
     TreeNode *invertTree(TreeNode *root);
 
+    // =============二叉树判别===========
+    // 101. 对称二叉树
+    bool isSymmetric(TreeNode *root);
+
     // 98. 验证二叉搜索树
     bool isValidBST(TreeNode *root);
 
