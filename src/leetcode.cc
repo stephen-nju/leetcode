@@ -973,7 +973,7 @@ TreeNode *Solution::invertTree(TreeNode *root) {
     }
     return root;
 }
-bool isSymmetric(TreeNode *root) {
+bool Solution::isSymmetric(TreeNode *root) {
     if (root == nullptr) return true;
     // 需要递归判断左右子树是个否相等,核心是后序遍历
     std::function<bool(TreeNode *, TreeNode *)> dfs_compare = [&](TreeNode *left, TreeNode *right) {
@@ -993,8 +993,102 @@ bool isSymmetric(TreeNode *root) {
     };
 
     return dfs_compare(root->left, root->right);
+    // 采用非递归的方式,类似层序遍历,但是需要注意,进入队列的顺序
 }
 
-bool Solution::isValidBST(TreeNode *root) {}
+int Solution::maxDepth(TreeNode *root) {
+    // 采用迭代的方式计算,层序遍历
+    if (root == nullptr) return 0;
+    int depth = 0;
+    std::queue<TreeNode *> que;
+    que.push(root);
+    while (!que.empty()) {
+        int size = que.size();
+        for (int i = 0; i < size; ++i) {
+            TreeNode *node = que.front();
+            que.pop();
+            if (node->left) que.push(node->left);
+            if (node->right) que.push(node->right);
+        }
+        depth++;
+    }
+    return depth;
+}
+
+int Solution::maxDepth(Node *root) {
+    if (root == nullptr) return 0;
+    int depth = 0;
+    std::queue<Node *> que;
+    que.push(root);
+    while (!que.empty()) {
+        int size = que.size();
+        for (int i = 0; i < size; ++i) {
+            Node *node = que.front();
+            que.pop();
+            for (int j = 0; j < node->children.size(); j++) {
+                if (node->children[j]) que.push(node->children[j]);
+            }
+        }
+        depth++;
+    }
+    return depth;
+}
+
+int Solution::minDepth(TreeNode *root) {
+    if (root == nullptr) return 0;
+    std::function<int(TreeNode *)> dfs = [&](TreeNode *node) {
+        // 如果当前节点为空,最小高度为0
+        if (node == nullptr) return 0;
+        if (node->left == nullptr && node->right != nullptr) {
+            int right = dfs(node->right);
+            return right + 1;
+        } else if (node->right == nullptr && node->left != nullptr) {
+            int left = dfs(node->left);
+            return left + 1;
+        } else if (node->left != nullptr && node->right != nullptr) {
+            int left  = dfs(node->left);
+            int right = dfs(node->right);
+            // 后序遍历的体现
+            return std::min(left, right) + 1;
+        } else {
+            return 1;
+        }
+    };
+    return dfs(root);
+}
+
+bool Solution::isBalanced(TreeNode *root) {
+    // 重点是如何构建递归函数的返回值,便于后序遍历计算机高度差
+    std::function<int(TreeNode *)> get_depth = [&](TreeNode *node) {
+        if (node == nullptr) return 0;
+        // 递归终止条件
+
+        int left_depth = get_depth(node->left);
+        if (left_depth == -1) return -1;
+        int right_depth = get_depth(node->right);
+        if (right_depth == -1) return -1;
+        if (std::abs(left_depth - right_depth) > 1) return -1;
+        return 1 + std::max(left_depth, right_depth);
+    };
+
+    return get_depth(root) != -1;
+}
+
+
+bool Solution::isValidBST(TreeNode *root) {
+    // 利用中序遍历,判断递增
+    // prev初始化需要设置
+    // TODO 梳理下节点非空的判断场景
+    TreeNode *prev                           = nullptr;
+    std::function<bool(TreeNode * node)> dfs = [&](TreeNode *node) -> bool {
+        if (node == nullptr) return true;
+        bool left = dfs(node->left);
+        if (prev != nullptr && node->val <= prev->val) return false;
+        prev       = node;
+        bool right = dfs(node->right);
+        return left && right;
+    };
+    return dfs(root);
+}
 
 }// namespace leetcode

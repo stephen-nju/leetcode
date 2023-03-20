@@ -29,6 +29,20 @@ struct TreeNode
     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
 };
 
+// N叉树的Node
+class Node
+{
+  public:
+    int val;
+    vector<Node *> children;
+    Node() {}
+    Node(int _val) { val = _val; }
+    Node(int _val, vector<Node *> _children) {
+        val      = _val;
+        children = _children;
+    }
+};
+
 class Solution
 {
   public:
@@ -110,6 +124,15 @@ class Solution
 
     // 98. 验证二叉搜索树
     bool isValidBST(TreeNode *root);
+    // 104. 二叉树的最大深度
+    int maxDepth(TreeNode *root);
+    // 559. N 叉树的最大深度
+    int maxDepth(Node *root);
+    // 111. 二叉树的最小深度
+    int minDepth(TreeNode *root);
+    // 110. 平衡二叉树
+    bool isBalanced(TreeNode *root);
+
 
   private:
     void quickSort(int arr[], int left, int right);
