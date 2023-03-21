@@ -127,7 +127,7 @@ class Solution
     // 104. 二叉树的最大深度
     int maxDepth(TreeNode *root);
     // 559. N 叉树的最大深度
-    int maxDepth(Node *root);
+    int maxDepth_N(Node *root);
     // 111. 二叉树的最小深度
     int minDepth(TreeNode *root);
     // 110. 平衡二叉树

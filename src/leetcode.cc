@@ -75,19 +75,19 @@ bool Solution::isMatch(string s, string p) {
     return dp[m][n];
 }
 
-int maxDepth(TreeNode *root, int *diameter) {
-    if (root == nullptr) return 0;
+int Solution::diameterOfBinaryTree(TreeNode *root) {
+    std::function<int(TreeNode*,int *)> max_depth=[&](TreeNode * root,int * diameter){
+            if (root == nullptr) return 0;
 
-    int left_depth  = maxDepth(root->left, diameter);
-    int right_depth = maxDepth(root->right, diameter);
+    int left_depth  = max_depth(root->left, diameter);
+    int right_depth = max_depth(root->right, diameter);
     *diameter       = std::max(right_depth + left_depth, *diameter);
     return std::max(left_depth, right_depth) + 1;
-}
+    };
 
-int Solution::diameterOfBinaryTree(TreeNode *root) {
     int diameter = 0;
     if (root == nullptr) { return 0; }
-    maxDepth(root, &diameter);
+    max_depth(root, &diameter);
     return diameter;
 }
 
@@ -587,7 +587,7 @@ void backtracking_permute(vector<int> nums, vector<bool> &used, vector<vector<in
     for (int i = 0; i < nums.size(); i++) {
         if (used[i] == false) {
             stack.push_back(nums[i]);
-            used[i] == true;
+            used[i] = true;
             backtracking_permute(nums, used, result, stack);
             stack.pop_back();
             used[i] = false;
@@ -1015,7 +1015,7 @@ int Solution::maxDepth(TreeNode *root) {
     return depth;
 }
 
-int Solution::maxDepth(Node *root) {
+int Solution::maxDepth_N(Node *root) {
     if (root == nullptr) return 0;
     int depth = 0;
     std::queue<Node *> que;
