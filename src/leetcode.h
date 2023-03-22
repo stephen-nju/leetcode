@@ -132,8 +132,15 @@ class Solution
     int minDepth(TreeNode *root);
     // 110. 平衡二叉树
     bool isBalanced(TreeNode *root);
-
-
+    // 257.二叉树所有路径
+    vector<string> binaryTreePaths(TreeNode* root);
+    // 448.
+    vector<int> findDisappearedNumbers(vector<int>& nums);
+ 
+    //1047. 删除字符串中的所有相邻重复项
+    string removeDuplicates(string s);
+    //692. 前K个高频单词
+    vector<string> topKFrequent(vector<string>& words, int k);
   private:
     void quickSort(int arr[], int left, int right);
 };

@@ -1,14 +1,17 @@
 
 #include "leetcode.h"
 
+#include <algorithm>
 #include <cstdlib>
 #include <functional>
 #include <numeric>
 #include <queue>
 #include <stack>
+#include <string>
 #include <unordered_map>
 #include <unordered_set>
 #include <utility>
+#include <vector>
 using std::pair;
 namespace leetcode {
 
@@ -76,13 +79,13 @@ bool Solution::isMatch(string s, string p) {
 }
 
 int Solution::diameterOfBinaryTree(TreeNode *root) {
-    std::function<int(TreeNode*,int *)> max_depth=[&](TreeNode * root,int * diameter){
-            if (root == nullptr) return 0;
+    std::function<int(TreeNode *, int *)> max_depth = [&](TreeNode *root, int *diameter) {
+        if (root == nullptr) return 0;
 
-    int left_depth  = max_depth(root->left, diameter);
-    int right_depth = max_depth(root->right, diameter);
-    *diameter       = std::max(right_depth + left_depth, *diameter);
-    return std::max(left_depth, right_depth) + 1;
+        int left_depth  = max_depth(root->left, diameter);
+        int right_depth = max_depth(root->right, diameter);
+        *diameter       = std::max(right_depth + left_depth, *diameter);
+        return std::max(left_depth, right_depth) + 1;
     };
 
     int diameter = 0;
@@ -647,7 +650,7 @@ vector<vector<int>> Solution::permuteUnique(vector<int> &nums) {
 
 vector<string> hierholzer_find_itinerary(vector<vector<string>> &tickets, string &vertex) {
     vector<string> result;
-    // 先构建图(图的存储方案)
+    // 先构建图(图的存储方案),欧拉半图
     std::unordered_map<string, std::priority_queue<string, vector<string>, std::greater<string>>> g;
     for (auto t : tickets) { g[t[0]].push(t[1]); }
 
@@ -824,7 +827,7 @@ vector<int> Solution::inorderTraversal(TreeNode *root) {
             st.push(cur);
             cur = cur->left;
         }
-        // 到达叶节点的时候
+        // 左子树为空的时候，并非达到达叶节点的时候,无法继续向左递归的时候
         cur = st.top();
         // 处理当前节点
         result.emplace_back(cur->val);
@@ -1089,6 +1092,94 @@ bool Solution::isValidBST(TreeNode *root) {
         return left && right;
     };
     return dfs(root);
+}
+
+vector<string> binaryTreePaths(TreeNode *root) {
+    //  这里注意边界条件
+    vector<string> result;
+    vector<int> path;
+    if (root == nullptr) return result;
+    std::function<void(TreeNode *)> dfs = [&](TreeNode *node) {
+        path.push_back(node->val);
+
+        if (node->left == nullptr && node->right == nullptr) {
+            // 叶节点判定,注意
+            string o = "";
+            for (int i = 0; i < path.size() - 1; i++) {
+                o += std::to_string(path[i]);
+                o += "->";
+            }
+            o += std::to_string(path[path.size() - 1]);
+            result.push_back(o);
+            return;
+        }
+        // 没有在前面进行非空判断,需要在输入的时候进行非空判断
+        if (node->left) {
+            dfs(node->left);
+            path.pop_back();
+        }
+        if (node->right) {
+            dfs(node->right);
+            path.pop_back();
+        }
+    };
+    dfs(root);
+    return result;
+    // 采用迭代的方式,第一种把到所有节点的路径都记录下来，可以用一个栈模拟递归，一个栈来记录路径
+}
+vector<int> Solution::findDisappearedNumbers(vector<int> &nums) {
+    vector<int> result;
+    for (int i = 0; i < nums.size(); i++) {
+        int pos = std::abs(nums[i]) - 1;
+        if (nums[pos] > 0) { nums[pos] = -nums[pos]; }
+    }
+    for (int i = 0; i < nums.size(); i++) {
+        if (nums[i] > 0) { result.emplace_back(nums[i] + 1); }
+    }
+    return result;
+}
+
+string Solution::removeDuplicates(string s) {
+    std::stack<char> st;
+    vector<char> result;
+    for (char c : s) {
+        if (!st.empty() && c == st.top()) {
+            st.pop();
+        } else {
+            st.push(c);
+        }
+    }
+    while (!st.empty()) {
+        result.push_back(st.top());
+        st.pop();
+    }
+
+    std::reverse(result.begin(), result.end());
+    string output;
+    for (int i = 0; i < result.size(); i++) { output += result[i]; }
+    return output;
+}
+vector<string> Solution::topKFrequent(vector<string> &words, int k) {
+    vector<string> result(k);
+    std::unordered_map<string, int> freq;
+    for (string &s : words) {
+        // 为什么用引用
+        freq[s]++;
+    }
+
+    auto compare = [](std::pair<string, int> &a, std::pair<string, int> &b) {
+        return a.second == b.second ? a.first < b.first : a.second > b.second;
+    };
+    std::priority_queue<std::pair<string, int>, vector<std::pair<string, int>>, decltype(compare)> que(compare);
+    for (auto &p : freq) {
+        que.emplace(std::pair<string, int>(p.first, p.second));
+        if (que.size() > k) { que.pop(); }
+    }
+    for (int i = 0; i < k - 1; i++) {
+        result[k-i-i]=que.top().first;
+        que.pop();
+    }
+    return result;
 }
 
 }// namespace leetcode
