@@ -19,6 +19,16 @@ using std::string;
 using std::vector;
 namespace leetcode {
 
+struct ListNode
+{
+    int val;
+    ListNode *next;
+    ListNode() : val(0), next(nullptr) {}
+    ListNode(int x) : val(x), next(nullptr) {}
+    ListNode(int x, ListNode *next) : val(x), next(next) {}
+};
+
+
 struct TreeNode
 {
     int val;
@@ -133,14 +143,27 @@ class Solution
     // 110. 平衡二叉树
     bool isBalanced(TreeNode *root);
     // 257.二叉树所有路径
-    vector<string> binaryTreePaths(TreeNode* root);
+    vector<string> binaryTreePaths(TreeNode *root);
+    // 404. 左叶子之和
+    int sumOfLeftLeaves(TreeNode *root);
+    // 513. 找树左下角的值
+    int findBottomLeftValue(TreeNode *root);
+
     // 448.
-    vector<int> findDisappearedNumbers(vector<int>& nums);
- 
-    //1047. 删除字符串中的所有相邻重复项
+    vector<int> findDisappearedNumbers(vector<int> &nums);
+
+    //===============栈=============
+    // 1047. 删除字符串中的所有相邻重复项
     string removeDuplicates(string s);
-    //692. 前K个高频单词
-    vector<string> topKFrequent(vector<string>& words, int k);
+
+    //==============堆=============
+    // 692. 前K个高频单词
+    vector<string> topKFrequent(vector<string> &words, int k);
+    // 23. 合并 K 个升序链表
+    ListNode *mergeKLists(vector<ListNode *> &lists);
+    // 662. 二叉树最大宽度
+    int widthOfBinaryTree(TreeNode *root);
+
   private:
     void quickSort(int arr[], int left, int right);
 };

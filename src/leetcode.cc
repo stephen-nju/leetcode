@@ -1171,15 +1171,103 @@ vector<string> Solution::topKFrequent(vector<string> &words, int k) {
         return a.second == b.second ? a.first < b.first : a.second > b.second;
     };
     std::priority_queue<std::pair<string, int>, vector<std::pair<string, int>>, decltype(compare)> que(compare);
+    // Note that the Compare parameter is defined such that it returns true if its first argument comes before its
+    // second argument in a weak ordering. come before 说明优先级高 But because the priority queue outputs largest
+    // elements first, the elements that "come before" are actually output last. That is, the front of the queue
+    // contains the "last" element according to the weak ordering imposed by Compare. 优先级高的数据放在后面
+    // 默认情况：A<B 返回true,说明A的优先级比B的优先级高，优先级高的在后面，小的放在后面，说明类似  大根堆
     for (auto &p : freq) {
         que.emplace(std::pair<string, int>(p.first, p.second));
         if (que.size() > k) { que.pop(); }
     }
     for (int i = 0; i < k - 1; i++) {
-        result[k-i-i]=que.top().first;
+        result[k - i - i] = que.top().first;
         que.pop();
     }
     return result;
 }
+
+int Solution::sumOfLeftLeaves(TreeNode *root) {
+    int sum = 0;
+    if (root == nullptr) return sum;
+
+    std::function<void(TreeNode *)> dfs = [&](TreeNode *node) {
+        if (node != nullptr && node->left != nullptr && node->left->left == nullptr && node->left->right == nullptr) {
+            sum += node->left->val;
+        }
+        if (node->left) dfs(node->left);
+        if (node->right) dfs(node->right);
+    };
+    dfs(root);
+    return sum;
+}
+
+int Solution::findBottomLeftValue(TreeNode *root) {
+    // 层序遍历方案
+    if (root == nullptr) return 0;
+    std::queue<TreeNode *> que;
+    int value = 0;
+    que.push(root);
+    while (!que.empty()) {
+        int num = que.size();
+        for (int i = 0; i < num; i++) {
+            TreeNode *node = que.front();
+            if (i == 0) { value = node->val; }
+            que.push(node->left);
+            que.push(node->right);
+            que.pop();
+        }
+    }
+    return value;
+}
+
+
+ListNode *Solution::mergeKLists(vector<ListNode *> &lists) {
+    // 思路：使用一个优先队列存取K个链表的第一个元素，后面每次pop一个元素，就把该元素的下一个元素放进队列
+    // 容易出现空指针的问题，需要注意[[1,3,2],[],[2,3]]
+    auto compare = [](ListNode *a, ListNode *b) { return a->val > b->val; };
+    // 大于返回True,优先级高的在后面，（priority_queue，为低优先级堆，根节点的优先级小于左右子节点的优先级）
+    std::priority_queue<ListNode *, vector<ListNode *>, decltype(compare)> priority_que(compare);
+    ListNode *head    = new ListNode();
+    ListNode *current = head;
+    if (lists.empty()) { return nullptr; }
+    for (int i = 0; i < lists.size(); i++) {
+        if (lists[i]) priority_que.push(lists[i]);
+    }
+    while (!priority_que.empty()) {
+        ListNode *top = priority_que.top();
+        // 前面的判断能够保证top非空,compare正常
+        current->next = top;
+        current       = top;
+        priority_que.pop();
+        if (top && top->next) priority_que.push(top->next);
+    }
+    return head->next;
+    // 时间复杂度分析，优先队列的插入和删除O(logK),链表的遍历O(kN)，所以时间复杂度为O(kNlogK)
+}
+
+int Solution::widthOfBinaryTree(TreeNode *root) {
+    if (root == nullptr) return 0;
+    // 采用节点编号
+    // overflow, 需要采用unsigned long long
+    int width = 0;
+    std::queue<std::pair<TreeNode *, int>> que;
+    que.push(std::pair<TreeNode *, int>(root, 1));
+    while (!que.empty()) {
+        int num = que.size();
+        int min=0,max=0;
+        for (int i = 0; i < num; i++) {
+            std::pair<TreeNode *, int> top = que.front();
+            if (top.first->left) que.push(std::pair<TreeNode *, int>(top.first->left, 2 * top.second));
+            if (top.first->right) que.push(std::pair<TreeNode *, int>(top.first->left, 2 * top.second + 1));
+            if(i==0){min=top.second;}
+            if(i==num-1) {max=top.second;}
+            que.pop();
+        }
+        width = std::max(width, (max - min));
+    }
+    return width;
+}
+
 
 }// namespace leetcode
