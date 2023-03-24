@@ -9,14 +9,21 @@
 #ifndef LEET_CODE_H
 
 #define LEET_CODE_H
-#include <algorithm>
 #include <cstdint>
 #include <cstdio>
-#include <string>
+#include <stdint.h>
 #include <vector>
+#include <algorithm>
+#include <string>
 
 using std::string;
 using std::vector;
+
+typedef uint8_t nlp_uint8_t;
+typedef int8_t nlp_int8_t;
+typedef int64_t nlp_int64_t;
+
+
 namespace leetcode {
 
 struct ListNode
@@ -148,13 +155,18 @@ class Solution
     int sumOfLeftLeaves(TreeNode *root);
     // 513. 找树左下角的值
     int findBottomLeftValue(TreeNode *root);
+    // 106. 从中序与后序遍历序列构造二叉树
+    TreeNode *buildTree(vector<int> &inorder, vector<int> &postorder);
+
 
     // 448.
     vector<int> findDisappearedNumbers(vector<int> &nums);
 
+
     //===============栈=============
     // 1047. 删除字符串中的所有相邻重复项
     string removeDuplicates(string s);
+
 
     //==============堆=============
     // 692. 前K个高频单词

@@ -1,0 +1,11 @@
+[
+{
+  "directory": "E:\\MyProject\\Cpp\\leetcode",
+  "arguments": ["clang.exe", "-c", "-Qunused-arguments", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++14", "-fexceptions", "-fcxx-exceptions", "-I", "C:\\Users\\18073701\\AppData\\Local\\.xmake\\packages\\d\\doctest\\2.4.9\\0657d1d34a3c4e40be48b0a86c1a9faa\\include", "-DNDEBUG", "-o", "build\\.objs\\test\\windows\\x86_64\\release\\src\\leetcode.cc.obj", "src\\leetcode.cc"],
+  "file": "src\\leetcode.cc"
+},
+{
+  "directory": "E:\\MyProject\\Cpp\\leetcode",
+  "arguments": ["clang.exe", "-c", "-Qunused-arguments", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++14", "-fexceptions", "-fcxx-exceptions", "-I", "C:\\Users\\18073701\\AppData\\Local\\.xmake\\packages\\d\\doctest\\2.4.9\\0657d1d34a3c4e40be48b0a86c1a9faa\\include", "-DNDEBUG", "-o", "build\\.objs\\test\\windows\\x86_64\\release\\src\\test_leetcode.cc.obj", "src\\test_leetcode.cc"],
+  "file": "src\\test_leetcode.cc"
+}]

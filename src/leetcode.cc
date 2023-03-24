@@ -1252,25 +1252,32 @@ int Solution::widthOfBinaryTree(TreeNode *root) {
     // 采用节点编号
     // overflow, 需要采用unsigned long long
     int64_t width = 0;
-    std::queue<std::pair<TreeNode *, int64_t>> que;
-    que.push(std::pair<TreeNode *, int64_t>(root, 1));
+    std::queue<std::pair<TreeNode *, nlp_int64_t>> que;
+    que.push(std::pair<TreeNode *, nlp_int64_t>(root, 1));
     while (!que.empty()) {
         int num = que.size();
-        vector<std::pair<TreeNode *, int64_t>> temp;
+        vector<std::pair<TreeNode *, nlp_int64_t>> temp;
         int64_t start = que.front().second;
         for (int i = 0; i < num; i++) {
-            std::pair<TreeNode *, int64_t> top = que.front();
+            std::pair<TreeNode *, nlp_int64_t> top = que.front();
             temp.push_back(top);
-            if (top.first->left) que.push(std::pair<TreeNode *, int64_t>(top.first->left, 2 * (top.second - start)));
+            if (top.first->left)
+                que.push(std::pair<TreeNode *, nlp_int64_t>(top.first->left, 2 * (top.second - start)));
             if (top.first->right)
-                que.push(std::pair<TreeNode *, int64_t>(top.first->right, 2 * (top.second - start) + 1));
+                que.push(std::pair<TreeNode *, nlp_int64_t>(top.first->right, 2 * (top.second - start) + 1));
             que.pop();
         }
 
         width = std::max(width, (temp.back().second - temp.front().second + 1));
     }
     return width;
-};
+}
 
+TreeNode* Solution::buildTree(vector<int> &inorder, vector<int> &postorder){
+
+
+
+
+}   
 
 }// namespace leetcode
