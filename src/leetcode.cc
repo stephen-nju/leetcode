@@ -1,13 +1,14 @@
-
 #include "leetcode.h"
 
 #include <algorithm>
+#include <cstddef>
 #include <cstdlib>
 #include <functional>
 #include <numeric>
 #include <queue>
 #include <stack>
 #include <string>
+#include <type_traits>
 #include <unordered_map>
 #include <unordered_set>
 #include <utility>
@@ -1273,11 +1274,82 @@ int Solution::widthOfBinaryTree(TreeNode *root) {
     return width;
 }
 
-TreeNode* Solution::buildTree(vector<int> &inorder, vector<int> &postorder){
+TreeNode *Solution::buildTree(vector<int> &inorder, vector<int> &postorder) {
+    // TODO 优化内存方案，可以使用index区间来代替
+    std::function<TreeNode *(vector<int> &, vector<int> &)> build = [&](vector<int> &in,
+                                                                        vector<int> &post) -> TreeNode * {
+        if (post.size() == 0) return nullptr;
+        int root_value = post[post.size() - 1];
+        TreeNode *node = new TreeNode(root_value);
+        int delimiter_index;
+        for (delimiter_index = 0; delimiter_index < in.size(); delimiter_index++) {
+            if (in[delimiter_index] == root_value) break;
+        }
+        vector<int> left_in(in.begin(), in.begin() + delimiter_index);
+        vector<int> right_in(in.begin() + delimiter_index + 1, in.end());
+        // 后序数组怎么切分,保持长度一致
+        vector<int> left_post(post.begin(), post.begin() + delimiter_index);
+        vector<int> right_post(post.begin() + delimiter_index, post.end() - 1);
+        TreeNode *left  = build(left_in, left_post);
+        TreeNode *right = build(right_in, right_post);
+        node->right     = right;
+        node->left      = left;
+        return node;
+    };
+    return build(inorder, postorder);
+}
 
+TreeNode *Solution::mergeTrees(TreeNode *root1, TreeNode *root2) {
+    std::function<TreeNode *(TreeNode *, TreeNode *)> merge = [&](TreeNode *r1, TreeNode *r2) -> TreeNode * {
+        if (r1 == nullptr && r2 == nullptr) return nullptr;
+        // 存在非空节点
+        int node_value;
+        TreeNode *r1_left, *r1_right, *r2_left, *r2_right;
+        if (r1 == nullptr && r2 != nullptr) {
+            node_value = r2->val;
+            r1_left    = nullptr;
+            r1_right   = nullptr;
+            r2_left    = r2->left;
+            r2_right   = r2->right;
 
+        } else if (r1 != nullptr && r2 == nullptr) {
+            node_value = r1->val;
+            r1_left    = r1->left;
+            r1_right   = r1->right;
+            r2_left    = nullptr;
+            r2_right   = nullptr;
+        } else {
+            node_value = r1->val + r2->val;
+            r1_left    = r1->left;
+            r1_right   = r1->right;
+            r2_left    = r2->left;
+            r2_right   = r2->right;
+        }
+        TreeNode *node  = new TreeNode(node_value);
+        TreeNode *left  = merge(r1_left, r2_left);
+        TreeNode *right = merge(r1_right, r2_right);
+        node->left      = left;
+        node->right     = right;
+        return node;
+    };
+    return merge(root1, root2);
+}
+TreeNode *Solution::searchBST(TreeNode *root, int val) {
+    if (root == nullptr || root->val == val) return root;
+    if (root->val > val) return searchBST(root->left, val);
+    if (root->val < val) return searchBST(root->right, val);
+    // 如果没有找到
+    return nullptr;
+}
 
+TreeNode *Solution::lowestCommonAncestor(TreeNode *root, TreeNode *p, TreeNode *q) {
+    std::function<bool(TreeNode *)> dfs = [&](TreeNode *cur) -> bool {
+        // 后续遍历
+        // 递归的终止条件
+        
 
-}   
+    };
+}
+
 
 }// namespace leetcode

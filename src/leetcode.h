@@ -157,7 +157,13 @@ class Solution
     int findBottomLeftValue(TreeNode *root);
     // 106. 从中序与后序遍历序列构造二叉树
     TreeNode *buildTree(vector<int> &inorder, vector<int> &postorder);
+    // 617.合并二叉树
+    TreeNode *mergeTrees(TreeNode *root1, TreeNode *root2);
+    // 700.二叉搜索树中的搜索
+    TreeNode *searchBST(TreeNode *root, int val);
 
+    // 236. 二叉树的最近公共祖先
+    TreeNode *lowestCommonAncestor(TreeNode *root, TreeNode *p, TreeNode *q);
 
     // 448.
     vector<int> findDisappearedNumbers(vector<int> &nums);

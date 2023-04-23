@@ -17,7 +17,7 @@ TEST_CASE("testing findSubsequences") {
     vector<vector<int>> ground_truth = {
         { { 4, 6 }, { 4, 7 }, { 4, 6, 7 }, { 4, 6, 7, 7 }, { 6, 7 }, { 6, 7, 7 }, { 7, 7 }, { 4, 7, 7 } }
     };
-    vector<vector<int>> o = solution->findSubsequences(nums);
+    vector<vector<int>> o = solution->findSubsequences(nums); 
     for (auto s : o) {
         for (auto ss : s) { printf("%d", ss); }
     }
