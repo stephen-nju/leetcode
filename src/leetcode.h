@@ -173,7 +173,13 @@ class Solution
     // 1047. 删除字符串中的所有相邻重复项
     string removeDuplicates(string s);
 
+    //============单调栈============
+// 739.每日温度
+vector<int> dailyTemperatures(vector<int>& temperatures);
 
+
+
+    
     //==============堆=============
     // 692. 前K个高频单词
     vector<string> topKFrequent(vector<string> &words, int k);
@@ -181,6 +187,9 @@ class Solution
     ListNode *mergeKLists(vector<ListNode *> &lists);
     // 662. 二叉树最大宽度
     int widthOfBinaryTree(TreeNode *root);
+
+
+
 
   private:
     void quickSort(int arr[], int left, int right);

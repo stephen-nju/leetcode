@@ -1346,10 +1346,30 @@ TreeNode *Solution::lowestCommonAncestor(TreeNode *root, TreeNode *p, TreeNode *
     std::function<bool(TreeNode *)> dfs = [&](TreeNode *cur) -> bool {
         // 后续遍历
         // 递归的终止条件
-        
-
     };
 }
 
+vector<int> Solution::dailyTemperatures(vector<int> &temperatures) {
+    // 单调栈 o(n)的复杂度
+    //由于需要获取相对位置，并且需要比较元素大小，采用元素的index 入栈
+    std::stack<int> st;
+    vector<int> result(temperatures.size(), 0);
+    for (int index = 0; index < temperatures.size(); index++) {
+        if(st.empty()){
+            st.push(index);
+        }else{
+            
+            while (!st.empty()&& temperatures[index]>temperatures[st.top()]) {
+                    st.pop();
 
+                    result[st.top()]=index-st.top();
+                    
+            }
+            st.push(index);
+        }
+
+    return result;
+
+    }
+}
 }// namespace leetcode
