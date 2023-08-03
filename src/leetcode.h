@@ -9,12 +9,12 @@
 #ifndef LEET_CODE_H
 
 #define LEET_CODE_H
+#include <algorithm>
 #include <cstdint>
 #include <cstdio>
 #include <stdint.h>
-#include <vector>
-#include <algorithm>
 #include <string>
+#include <vector>
 
 using std::string;
 using std::vector;
@@ -23,11 +23,9 @@ typedef uint8_t nlp_uint8_t;
 typedef int8_t nlp_int8_t;
 typedef int64_t nlp_int64_t;
 
-
 namespace leetcode {
 
-struct ListNode
-{
+struct ListNode {
     int val;
     ListNode *next;
     ListNode() : val(0), next(nullptr) {}
@@ -35,33 +33,30 @@ struct ListNode
     ListNode(int x, ListNode *next) : val(x), next(next) {}
 };
 
-
-struct TreeNode
-{
+struct TreeNode {
     int val;
     TreeNode *left;
     TreeNode *right;
     TreeNode() : val(0), left(nullptr), right(nullptr) {}
     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
-    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+    TreeNode(int x, TreeNode *left, TreeNode *right)
+        : val(x), left(left), right(right) {}
 };
 
 // N叉树的Node
-class Node
-{
+class Node {
   public:
     int val;
     vector<Node *> children;
     Node() {}
     Node(int _val) { val = _val; }
     Node(int _val, vector<Node *> _children) {
-        val      = _val;
+        val = _val;
         children = _children;
     }
 };
 
-class Solution
-{
+class Solution {
   public:
     int minDistance(string word1, string word2);
     // 10. 正则表达式匹配
@@ -74,6 +69,12 @@ class Solution
     // 蓝桥杯2022 ，c组整数拆分(二维背包问题)
     int64_t intPartition();
 
+    // 509 斐波那契数列
+    int fib(int n);
+    // 70 爬楼梯
+    int climbStairs(int n);
+    //746 最小代价爬楼梯
+     int minCostClimbingStairs(vector<int>& cost);
     // 121.买卖股票的最佳时机
     int maxProfit(vector<int> &prices);
     // 122.买卖股票的最佳时机 II
@@ -168,18 +169,14 @@ class Solution
     // 448.
     vector<int> findDisappearedNumbers(vector<int> &nums);
 
-
     //===============栈=============
     // 1047. 删除字符串中的所有相邻重复项
     string removeDuplicates(string s);
 
     //============单调栈============
-// 739.每日温度
-vector<int> dailyTemperatures(vector<int>& temperatures);
+    // 739.每日温度
+    vector<int> dailyTemperatures(vector<int> &temperatures);
 
-
-
-    
     //==============堆=============
     // 692. 前K个高频单词
     vector<string> topKFrequent(vector<string> &words, int k);
@@ -188,13 +185,10 @@ vector<int> dailyTemperatures(vector<int>& temperatures);
     // 662. 二叉树最大宽度
     int widthOfBinaryTree(TreeNode *root);
 
-
-
-
   private:
     void quickSort(int arr[], int left, int right);
 };
 
-}// namespace leetcode
+} // namespace leetcode
 
-#endif// leetcode_h
+#endif // leetcode_h
