@@ -166,44 +166,29 @@ int Solution::fib(int n) {
     // 可以采取动态规划的方式进行计算
 }
 // 70 爬楼梯
-int Solution::climbStairs(int n){
-    vector<int> dp(n+1,0);
+int Solution::climbStairs(int n) {
+    vector<int> dp(n + 1, 0);
     // dp[i]表示到达第n层的所有方式
-    dp[0]=1;
-    dp[1]=1;
-    for(int i=2;i<n+1,i++){
-        dp[i]=dp[i-1]+dp[i-2];
+    dp[0] = 1;
+    dp[1] = 1;
+    for (int i = 2; i < n + 1; i++) {
+        dp[i] = dp[i - 1] + dp[i - 2];
     }
 
     return dp[n];
-
 }
 // 最小代价爬楼梯
-int Solution::minCostClimbingStairs(vector<int>& cost){
-    //dp[i]表示爬到第i层的最小代价
-    vector<int> dp(cost.size(),0);
-    // 初始化dp数组
-    dp[0]=0;
-    dp[1]=0;
-    for (int i = 0; i < length; i++) {
-        
-    }
+int Solution::minCostClimbingStairs(vector<int> &cost) {
+    // dp[i]表示爬到第i层的最小代价
+    // vector<int> dp(cost.size(),0);
+    // // 初始化dp数组
+    // dp[0]=0;
+    // dp[1]=0;
+    // for (int i = 0; i < length; i++) {
+    //
+    // }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-}
-// 二维背包问题
+} // 二维背包问题
 
 int64_t Solution::intPartition() {
     const int N = 10;

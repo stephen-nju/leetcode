@@ -73,8 +73,8 @@ class Solution {
     int fib(int n);
     // 70 爬楼梯
     int climbStairs(int n);
-    //746 最小代价爬楼梯
-     int minCostClimbingStairs(vector<int>& cost);
+    // 746 最小代价爬楼梯
+    int minCostClimbingStairs(vector<int> &cost);
     // 121.买卖股票的最佳时机
     int maxProfit(vector<int> &prices);
     // 122.买卖股票的最佳时机 II
