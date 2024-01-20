@@ -58,6 +58,7 @@ class Node {
 
 class Solution {
   public:
+    // ===============动态规划========================
     int minDistance(string word1, string word2);
     // 10. 正则表达式匹配
     bool isMatch(string s, string p);
@@ -68,6 +69,9 @@ class Solution {
 
     // 蓝桥杯2022 ，c组整数拆分(二维背包问题)
     int64_t intPartition();
+
+    // 647. 回文子串
+    int countSubstrings(string s);
 
     // 509 斐波那契数列
     int fib(int n);

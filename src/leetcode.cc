@@ -310,23 +310,25 @@ int Solution::maxProfit_3(vector<int> &prices) {
     }
     return dp[n - 1][K][0];
 }
-
-void backtracking(int n, int k, int startIndex, vector<vector<int>> &result,
-                  vector<int> &path) {
+void backtracking_combine(int n, int k, vector<vector<int>> &result,
+                          vector<int> &path, int start_index) {
+    // n集合大小，k为组合个数,result 存放结果,path 为中间结果
     if (path.size() == k) {
         result.push_back(path);
         return;
     }
-    for (int i = startIndex; i <= n; i++) {
-        path.push_back(i);                       // 处理节点
-        backtracking(n, k, i + 1, result, path); // 递归
-        path.pop_back(); // 回溯，撤销处理的节点
+    // 开始节点
+    for (int index = start_index; index <= n; index++) {
+        path.push_back(index);                               // 处理节点
+        backtracking_combine(n, k, result, path, index + 1); // 递归一下
+        path.pop_back();                                     // 撤销结果
     }
 }
+
 vector<vector<int>> Solution::combine(int n, int k) {
     vector<vector<int>> result;
     vector<int> path;
-    backtracking(n, k, 1, result, path);
+    backtracking_combine(n, k, result, path, 0);
     return result;
 }
 
@@ -374,6 +376,7 @@ vector<string> Solution::letterCombinations(string digits) {
 
     if (digits.size() == 0)
         return result;
+    // 使用string 数组构建map
     string letters_map[10] = {"",    "",    "abc",  "def", "ghi",
                               "jkl", "mno", "pqrs", "tuv", "wxyz"};
     int n = digits.size();
@@ -1535,5 +1538,29 @@ vector<int> Solution::dailyTemperatures(vector<int> &temperatures) {
 
         return result;
     }
+}
+
+int Solution::countSubstrings(string s) {
+    int num = 0;
+    int n = s.size();
+    // dp数组初始化,dp[i][j]表示起始位置为i，终止位置为j的字符串是否是回文串
+    vector<vector<int>> dp(n, vector<int>(n, 0));
+    // 递推公式dp[i][j]是否是回文字符串，取决于dp[i+1][j-1],所以需要注意遍历顺序
+    // 起始位置需要小于终止位置,所以是个上三角矩阵
+    for (int i = n - 1; i >= 0; i--) {
+        for (int j = i; j < n; j++) {
+            if (s[i] == s[j]) {
+                if (j - i <= 1) {
+                    dp[i][j] = 1;
+                    num++;
+                } else if (dp[i + 1][j - 1] == 1) {
+                    num++;
+                    dp[i][j] = 1;
+                }
+            }
+        }
+    }
+
+    return num;
 }
 } // namespace leetcode
