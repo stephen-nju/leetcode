@@ -189,6 +189,11 @@ class Solution {
     // 662. 二叉树最大宽度
     int widthOfBinaryTree(TreeNode *root);
 
+    //===============贪心算法==============================
+
+    // 455. 分发饼干
+    int findContentChildren(vector<int> &g, vector<int> &s);
+
   private:
     void quickSort(int arr[], int left, int right);
 };

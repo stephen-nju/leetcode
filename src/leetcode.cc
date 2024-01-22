@@ -1563,4 +1563,19 @@ int Solution::countSubstrings(string s) {
 
     return num;
 }
+
+int Solution::findContentChildren(vector<int> &g, vector<int> &s) {
+    std::sort(s.begin(), s.end());
+    std::sort(g.begin(), g.end());
+    int index = 0;
+    for (int i = 0; i < s.size(); i++) {
+        // 注意index的判断，需要先判断不能越界,因为饼干可以很多，人数可以很少
+        if (index < g.size() && s[i] >= g[index]) {
+            index++;
+        }
+    }
+
+    return index;
+}
+
 } // namespace leetcode
