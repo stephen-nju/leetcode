@@ -193,7 +193,8 @@ class Solution {
 
     // 455. 分发饼干
     int findContentChildren(vector<int> &g, vector<int> &s);
-
+    
+    int wiggleMaxLength(vector<int>& nums);
   private:
     void quickSort(int arr[], int left, int right);
 };

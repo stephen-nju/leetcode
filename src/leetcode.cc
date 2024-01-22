@@ -1577,5 +1577,48 @@ int Solution::findContentChildren(vector<int> &g, vector<int> &s) {
 
     return index;
 }
+int Solution::wiggleMaxLength(vector<int>& nums){
+    vector<vector<int>> dp(nums.size(),vector<int>(2));
+    // dp[i][0]表示以nums[i]结尾，序列呈现上升趋势的，子序列长度
+    // dp[i][1]表示以nums[i]结尾，序列呈现下降趋势趋势的，子序列长度
+    dp[0][0]=dp[0][1]=1;
+    for (int i = 1; i < nums.size(); i++)
+    {
+        if(nums[i]==nums[i-1]){
+            dp[i][0]=dp[i-1][0];
+            dp[i][1]=dp[i-1][1];
+        }else{
+            if (nums[i]>nums[i-1])
+            {
+                dp[i][0]=dp[i-1][0];
+                dp[i][1]=std::max(dp[i-1][0]+1,dp[i-1][1]);
+            }else if (nums[i]<nums[i-1])
+            {
+                dp[i][0]=std::max(dp[i-1][1]+1,dp[i-1][0]);
+                dp[i][1]=dp[i-1][1];
+            }
+
+        }
+        
+    }
+    return std::max(dp[nums.size()-1][0],dp[nums.size()-1][1]);
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
 
 } // namespace leetcode
