@@ -1602,23 +1602,27 @@ int Solution::wiggleMaxLength(vector<int>& nums){
         
     }
     return std::max(dp[nums.size()-1][0],dp[nums.size()-1][1]);
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
+
+ int Solution::lengthOfLIS(vector<int>& nums){
+    int n=nums.size();
+     vector<int> dp(n,1);
+    // dp[i]表示以nums[i]结尾的最长递增子序列的长度
+    dp[0]=1;
+    //初始化
+    for (int i = 0; i <n; i++)
+    {
+        for (int j = 0; j<i; j++)
+        {
+            if(nums[j]<nums[i]){
+            dp[i]=std::max(dp[i],dp[j]+1);}
+        }
+        
+    }
+    return *std::max_element(dp.begin(),dp.end());
+
+ }
+
+
 
 } // namespace leetcode
