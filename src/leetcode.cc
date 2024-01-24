@@ -1624,16 +1624,14 @@ int Solution::wiggleMaxLength(vector<int>& nums){
 
  }
 
-
-
 int Solution::integerBreak(int n) {
-    // 看成完全背包问题
-    vector<int> dp(n + 1, INT_MIN);
+    // 不同于完全背包问题，注意动态规划的递推公式
+    vector<int> dp(n + 1, 0);
     // 初始化
     dp[1] = dp[2] = 1;
     for (int j = 2; j <= n; j++) {
         for (int i = 1; i <= j; i++) {
-            dp[j] = std::max(dp[j], dp[j - i] * i);
+            dp[j] = std::max(dp[j], std::max(i*(j-i),dp[j - i] * i));
         }
     }
 
