@@ -60,6 +60,8 @@ class Solution {
   public:
     // ===============动态规划========================
     int minDistance(string word1, string word2);
+
+    int integerBreak(int n);
     // 10. 正则表达式匹配
     bool isMatch(string s, string p);
     // 二叉树最大直径

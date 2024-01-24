@@ -4,6 +4,7 @@
 #include <cstddef>
 #include <cstdlib>
 #include <functional>
+#include <limits.h>
 #include <numeric>
 #include <queue>
 #include <stack>
@@ -1576,6 +1577,20 @@ int Solution::findContentChildren(vector<int> &g, vector<int> &s) {
     }
 
     return index;
+}
+
+int Solution::integerBreak(int n) {
+    // 看成完全背包问题
+    vector<int> dp(n + 1, INT_MIN);
+    // 初始化
+    dp[1] = dp[2] = 1;
+    for (int j = 2; j <= n; j++) {
+        for (int i = 1; i <= j; i++) {
+            dp[j] = std::max(dp[j], dp[j - i] * i);
+        }
+    }
+
+    return dp[n];
 }
 
 } // namespace leetcode
