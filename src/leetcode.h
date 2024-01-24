@@ -87,6 +87,11 @@ class Solution {
     int maxProfit_2(vector<int> &prices);
     // 123. 买卖股票的最佳时机 III
     int maxProfit_3(vector<int> &prices);
+    
+    //300. 最长递增子序列
+    int lengthOfLIS(vector<int>& nums);
+
+  //===============回溯====================
 
     // 77.组合
     vector<vector<int>> combine(int n, int k);
@@ -195,7 +200,8 @@ class Solution {
 
     // 455. 分发饼干
     int findContentChildren(vector<int> &g, vector<int> &s);
-
+    
+    int wiggleMaxLength(vector<int>& nums);
   private:
     void quickSort(int arr[], int left, int right);
 };
