@@ -202,6 +202,10 @@ class Solution {
     int findContentChildren(vector<int> &g, vector<int> &s);
     
     int wiggleMaxLength(vector<int>& nums);
+    
+    //53. 最大子数组和
+     int maxSubArray(vector<int>& nums);
+     
   private:
     void quickSort(int arr[], int left, int right);
 };

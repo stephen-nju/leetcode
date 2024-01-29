@@ -1638,4 +1638,25 @@ int Solution::integerBreak(int n) {
     return dp[n];
 }
 
+ int Solution::maxSubArray(vector<int>& nums){
+    int result=INT_MIN;
+    int count=0;
+    // 双指针，起始位置必是正数
+    for(int i=0;i<nums.size();i++){
+        count+=nums[i];
+        if(count>=result){
+            //起始位置不变，更新end 位置
+            result=count;
+        }
+        //更新begin位置
+        if(count<=0){
+            result=0;
+        }
+    }
+
+    return result;
+
+
+ }
+
 } // namespace leetcode
