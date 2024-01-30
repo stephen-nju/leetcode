@@ -1655,8 +1655,46 @@ int Solution::integerBreak(int n) {
     }
 
     return result;
-
-
  }
+
+string Solution::minWindow(string s, string t){
+    std::unordered_map<char,int> windows,need;
+    for(char c:t) need[c]++;
+    int right=0,left=0; //左闭右开的区间
+    int valid=0;
+    //判断窗口内是否有有效解的
+    int start=0,len=INT_MAX;
+    //记录最小子串的起始位置
+    while(right<s.size()){
+        char c=s[right];
+        right++;
+        if(need.count(c)){
+            windows[c]++;
+            if(windows[c]==need[c]){
+                valid++;
+            }
+        }
+        while(valid==need.size()){
+            // 更新最小解的内容
+            //更新内容
+            if(right-left<len){
+                start=left;
+                len=right-left;
+            }
+            char d=s[left];
+            left++;
+            if(need.count(d)){
+                if(windows[d]==need[d]){
+                    // 有效数目减少
+                    valid--;
+                }
+                windows[d]--;
+            }
+            }
+    }
+  // 返回最小覆盖子串
+    return len == INT_MAX ? "" : s.substr(start, len);
+
+}
 
 } // namespace leetcode

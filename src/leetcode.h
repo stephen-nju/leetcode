@@ -206,6 +206,9 @@ class Solution {
     //53. 最大子数组和
      int maxSubArray(vector<int>& nums);
      
+     //76. 最小覆盖子串
+    string minWindow(string s, string t);
+
   private:
     void quickSort(int arr[], int left, int right);
 };
