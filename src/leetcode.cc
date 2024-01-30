@@ -1694,7 +1694,19 @@ string Solution::minWindow(string s, string t){
     }
   // 返回最小覆盖子串
     return len == INT_MAX ? "" : s.substr(start, len);
-
 }
+
+
+ bool Solution::canJump(vector<int>& nums){
+    //确定每次的步长
+    int step=0;
+    if(nums.size()==1) return true;
+    for(int i=0;i<=step;i++){
+        step=std::max(step,nums[i]+i);
+        if (step>nums.size()-1) return true;
+    }
+    return false;
+
+ }
 
 } // namespace leetcode

@@ -209,6 +209,9 @@ class Solution {
      //76. 最小覆盖子串
     string minWindow(string s, string t);
 
+    //55.跳跃游戏
+     bool canJump(vector<int>& nums);
+
   private:
     void quickSort(int arr[], int left, int right);
 };
