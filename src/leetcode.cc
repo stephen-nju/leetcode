@@ -1709,4 +1709,46 @@ string Solution::minWindow(string s, string t){
 
  }
 
+int Solution::jump(vector<int> &nums){
+    //需要保证使用最小的步数和最大的距离
+    int n=nums.size();
+    if (n==1) return 1;
+    int steps=0;
+    //最少跳跃的步数
+    int current_distance=0;
+    //当前能到达的最远位置
+    int next_distance=0;
+    //下一步能到达的最远位置
+    for(int i=0;i<nums.size();i++){
+        //下一步的最远下标
+        next_distance=std::max(next_distance,nums[i]+i);
+        if(i==current_distance){
+            // 到达当前最大的位置的时候
+            if(current_distance!=nums.size()-1){
+                steps++;
+                current_distance=next_distance;
+                //多增加几次判断
+                if(next_distance>nums.size()-1) break;
+            }else {
+            break;
+            }
+        }
+    }
+    return steps;
+
+}
+
+ int Solution::largestSumAfterKNegations(vector<int>& nums, int k){
+    //先排序
+
+
+
+
+
+
+    return 0;
+ }
+
+
+
 } // namespace leetcode

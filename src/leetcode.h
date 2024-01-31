@@ -211,6 +211,11 @@ class Solution {
 
     //55.跳跃游戏
      bool canJump(vector<int>& nums);
+    //45.跳跃游戏2
+     int jump(vector<int>& nums);
+     
+    //  1005. K 次取反后最大化的数组和
+     int largestSumAfterKNegations(vector<int>& nums, int k);
 
   private:
     void quickSort(int arr[], int left, int right);
