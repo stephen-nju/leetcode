@@ -1,6 +1,7 @@
 #include "leetcode.h"
 
 #include <algorithm>
+#include <asm-generic/errno.h>
 #include <cstddef>
 #include <cstdlib>
 #include <functional>
@@ -1739,14 +1740,20 @@ int Solution::jump(vector<int> &nums){
 }
 
  int Solution::largestSumAfterKNegations(vector<int>& nums, int k){
-    //先排序
-
-
-
-
-
-
-    return 0;
+    //使用最小堆，每次将堆顶的数据转化，重新插入堆
+    std::priority_queue<int,vector<int>,std::greater<int>> min_heap(nums.begin(),nums.end());
+    while (k>0) {
+        int min_value=min_heap.top();
+        min_heap.pop();
+        min_heap.push(-1*min_value);
+        k--;
+    }
+    int sum=0;
+    while(!min_heap.empty()){
+        sum+=min_heap.top();
+        min_heap.pop();
+    }
+    return sum;
  }
 
 
