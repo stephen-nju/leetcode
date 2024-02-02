@@ -1,3 +1,5 @@
+#include <cstdio>
+#include <iostream>
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest/doctest.h"
 #include "leetcode.h"
@@ -17,14 +19,14 @@ TEST_CASE("testing findSubsequences") {
     vector<vector<int>> ground_truth = {
         { { 4, 6 }, { 4, 7 }, { 4, 6, 7 }, { 4, 6, 7, 7 }, { 6, 7 }, { 6, 7, 7 }, { 7, 7 }, { 4, 7, 7 } }
     };
-    vector<vector<int>> o = solution->findSubsequences(nums); 
+    vector<vector<int>> o = solution->findSubsequences(nums);
     for (auto s : o) {
         for (auto ss : s) { printf("%d", ss); }
     }
+    printf("\n");
 }
 
-TEST_CASE("testing permute") {
-    vector<int> nums{ 1, 2, 3 };
-    vector<vector<int>> o = solution->permute(nums);
-    
+TEST_CASE("testing calculate") {
+    int out = solution->calculate("1 + 1 ");
+    printf("calculate output=%d\n", out);
 }

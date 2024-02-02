@@ -183,6 +183,8 @@ class Solution {
     //===============栈=============
     // 1047. 删除字符串中的所有相邻重复项
     string removeDuplicates(string s);
+    //224.基本计算器
+    int calculate(string s);
 
     //============单调栈============
     // 739.每日温度

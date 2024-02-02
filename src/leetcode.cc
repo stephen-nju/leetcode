@@ -2,7 +2,9 @@
 
 #include <algorithm>
 #include <asm-generic/errno.h>
+#include <cctype>
 #include <cstddef>
+#include <cstdio>
 #include <cstdlib>
 #include <functional>
 #include <limits.h>
@@ -20,34 +22,24 @@ namespace leetcode {
 
 int Solution::minDistance(string word1, string word2) {
     int distance = 0;
-    int m = word1.size();
-    int n = word2.size();
-    int **dp = (int **)malloc(sizeof(int *) * (m + 1));
-    for (int i = 0; i < m + 1; i++) {
-        dp[i] = (int *)malloc(sizeof(int *) * (n + 1));
-    }
+    int m        = word1.size();
+    int n        = word2.size();
+    int **dp     = (int **)malloc(sizeof(int *) * (m + 1));
+    for (int i = 0; i < m + 1; i++) { dp[i] = (int *)malloc(sizeof(int *) * (n + 1)); }
     // vector<vector<int>> dp;
-    for (int i = 0; i <= m; i++) {
-        dp[i][0] = i;
-    }
-    for (int j = 0; j <= n; j++) {
-        dp[0][j] = j;
-    }
+    for (int i = 0; i <= m; i++) { dp[i][0] = i; }
+    for (int j = 0; j <= n; j++) { dp[0][j] = j; }
     for (int i = 1; i <= m; i++) {
         for (int j = 1; j <= n; j++) {
             if (word1[i - 1] == word2[j - 1]) {
                 dp[i][j] = dp[i - 1][j - 1];
             } else {
-                dp[i][j] =
-                    std::min(dp[i - 1][j] + 1,
-                             std::min(dp[i][j - 1] + 1, dp[i - 1][j - 1] + 1));
+                dp[i][j] = std::min(dp[i - 1][j] + 1, std::min(dp[i][j - 1] + 1, dp[i - 1][j - 1] + 1));
             }
         }
     }
     distance = dp[m][n];
-    for (int i = 0; i < m + 1; i++) {
-        free(dp[i]);
-    }
+    for (int i = 0; i < m + 1; i++) { free(dp[i]); }
     free(dp);
     return distance;
 }
@@ -59,9 +51,7 @@ bool Solution::isMatch(string s, string p) {
     vector<vector<bool>> dp;
     dp[0][0] = true;
     // 初始化数组
-    for (int i = 1; i < m + 1; i++) {
-        dp[i][0] = false;
-    }
+    for (int i = 1; i < m + 1; i++) { dp[i][0] = false; }
     for (int j = 1; j < n + 1; j++) {
         if (p[j - 1] == '*') {
             dp[0][j] = dp[0][j - 2];
@@ -94,21 +84,17 @@ bool Solution::isMatch(string s, string p) {
 }
 
 int Solution::diameterOfBinaryTree(TreeNode *root) {
-    std::function<int(TreeNode *, int *)> max_depth = [&](TreeNode *root,
-                                                          int *diameter) {
-        if (root == nullptr)
-            return 0;
+    std::function<int(TreeNode *, int *)> max_depth = [&](TreeNode *root, int *diameter) {
+        if (root == nullptr) return 0;
 
-        int left_depth = max_depth(root->left, diameter);
+        int left_depth  = max_depth(root->left, diameter);
         int right_depth = max_depth(root->right, diameter);
-        *diameter = std::max(right_depth + left_depth, *diameter);
+        *diameter       = std::max(right_depth + left_depth, *diameter);
         return std::max(left_depth, right_depth) + 1;
     };
 
     int diameter = 0;
-    if (root == nullptr) {
-        return 0;
-    }
+    if (root == nullptr) { return 0; }
     max_depth(root, &diameter);
     return diameter;
 }
@@ -116,7 +102,7 @@ int Solution::diameterOfBinaryTree(TreeNode *root) {
 // 快排
 inline void swap(int arr[], int x, int y) {
     int temp;
-    temp = arr[x];
+    temp   = arr[x];
     arr[x] = arr[y];
     arr[y] = temp;
 }
@@ -124,7 +110,7 @@ inline void swap(int arr[], int x, int y) {
 int partition(int arr[], int left, int right) {
     // 随机选择pivot
     int pivot_index = left + rand() % (right - left + 1);
-    int pivot = arr[pivot_index];
+    int pivot       = arr[pivot_index];
     swap(arr, pivot_index, right);
     int low = 0, high = right - 1;
     while (low <= high) {
@@ -143,25 +129,20 @@ int partition(int arr[], int left, int right) {
 }
 
 void Solution::quickSort(int arr[], int left, int right) {
-    if (left >= right) {
-        return;
-    }
+    if (left >= right) { return; }
     int pivot_index = partition(arr, left, right);
     Solution::quickSort(arr, left, pivot_index - 1);
     Solution::quickSort(arr, pivot_index + 1, right);
 }
 
 void Solution::quickSort(int arr[], int length) {
-    if (length <= 1) {
-        return;
-    };
+    if (length <= 1) { return; };
     Solution::quickSort(arr, 0, length - 1);
 }
 // 斐波拉契数
 int Solution::fib(int n) {
     // 递归方式
-    if (n < 2)
-        return n;
+    if (n < 2) return n;
 
     return Solution::fib(n - 1) + Solution::fib(n - 2);
 
@@ -173,9 +154,7 @@ int Solution::climbStairs(int n) {
     // dp[i]表示到达第n层的所有方式
     dp[0] = 1;
     dp[1] = 1;
-    for (int i = 2; i < n + 1; i++) {
-        dp[i] = dp[i - 1] + dp[i - 2];
-    }
+    for (int i = 2; i < n + 1; i++) { dp[i] = dp[i - 1] + dp[i - 2]; }
 
     return dp[n];
 }
@@ -190,7 +169,7 @@ int Solution::minCostClimbingStairs(vector<int> &cost) {
     //
     // }
 
-} // 二维背包问题
+}// 二维背包问题
 
 int64_t Solution::intPartition() {
     const int N = 10;
@@ -198,13 +177,9 @@ int64_t Solution::intPartition() {
     // 创建动态数组dp[M+1][N+1][M+1]
     int64_t ***dp;
     dp = new int64_t **[M + 1];
+    for (int i = 0; i < M + 1; i++) { dp[i] = new int64_t *[N + 1]; }
     for (int i = 0; i < M + 1; i++) {
-        dp[i] = new int64_t *[N + 1];
-    }
-    for (int i = 0; i < M + 1; i++) {
-        for (int j = 0; j < N + 1; j++) {
-            dp[i][j] = new int64_t[M + 1];
-        }
+        for (int j = 0; j < N + 1; j++) { dp[i][j] = new int64_t[M + 1]; }
     }
 
     // 数组初始化
@@ -239,9 +214,7 @@ int64_t Solution::intPartition() {
     ans = dp[M][N][M];
     // Deallocate memory
     for (int i = 0; i < M + 1; i++) {
-        for (int j = 0; j < N + 1; j++) {
-            delete[] dp[i][j];
-        }
+        for (int j = 0; j < N + 1; j++) { delete[] dp[i][j]; }
         delete[] dp[i];
     }
     delete[] dp;
@@ -294,8 +267,7 @@ int Solution::maxProfit_2(vector<int> &prices) {
 int Solution::maxProfit_3(vector<int> &prices) {
     int n = prices.size();
     int K = 2;
-    vector<vector<vector<int>>> dp(n + 1,
-                                   vector<vector<int>>(2 + 1, vector<int>(2)));
+    vector<vector<vector<int>>> dp(n + 1, vector<vector<int>>(2 + 1, vector<int>(2)));
     // 初始化dp Table,不管交易次数，第一天持有股票利润为-prices[0],不持有股票为0
     for (int k = 0; k < K + 1; k++) {
         dp[0][k][0] = 0;
@@ -304,16 +276,13 @@ int Solution::maxProfit_3(vector<int> &prices) {
     for (int i = 1; i < n; i++) {
         for (int k = 1; k < K + 1; k++) {
             // 买入卖出算一次交易，这里只针对买入计算交易次数
-            dp[i][k][0] =
-                std::max(dp[i - 1][k][0], dp[i - 1][k][1] + prices[i]);
-            dp[i][k][1] =
-                std::max(dp[i - 1][k][1], dp[i - 1][k - 1][0] - prices[i]);
+            dp[i][k][0] = std::max(dp[i - 1][k][0], dp[i - 1][k][1] + prices[i]);
+            dp[i][k][1] = std::max(dp[i - 1][k][1], dp[i - 1][k - 1][0] - prices[i]);
         }
     }
     return dp[n - 1][K][0];
 }
-void backtracking_combine(int n, int k, vector<vector<int>> &result,
-                          vector<int> &path, int start_index) {
+void backtracking_combine(int n, int k, vector<vector<int>> &result, vector<int> &path, int start_index) {
     // n集合大小，k为组合个数,result 存放结果,path 为中间结果
     if (path.size() == k) {
         result.push_back(path);
@@ -321,9 +290,9 @@ void backtracking_combine(int n, int k, vector<vector<int>> &result,
     }
     // 开始节点
     for (int index = start_index; index <= n; index++) {
-        path.push_back(index);                               // 处理节点
-        backtracking_combine(n, k, result, path, index + 1); // 递归一下
-        path.pop_back();                                     // 撤销结果
+        path.push_back(index);// 处理节点
+        backtracking_combine(n, k, result, path, index + 1);// 递归一下
+        path.pop_back();// 撤销结果
     }
 }
 
@@ -334,11 +303,8 @@ vector<vector<int>> Solution::combine(int n, int k) {
     return result;
 }
 
-void backtracking_combination_sum3(int n, int k, int start,
-                                   vector<vector<int>> &result,
-                                   vector<int> &stack) {
-    if (stack.size() == k &&
-        std::accumulate(stack.begin(), stack.end(), 0) == n) {
+void backtracking_combination_sum3(int n, int k, int start, vector<vector<int>> &result, vector<int> &stack) {
+    if (stack.size() == k && std::accumulate(stack.begin(), stack.end(), 0) == n) {
         result.push_back(stack);
         return;
     }
@@ -356,19 +322,20 @@ vector<vector<int>> Solution::combinationSum3(int k, int n) {
     return result;
 }
 
-void backtracking_letter_combination(int start, string &digits,
-                                     vector<string> &result, string &stack,
+void backtracking_letter_combination(int start,
+                                     string &digits,
+                                     vector<string> &result,
+                                     string &stack,
                                      string letters_map[10]) {
     if (stack.size() == digits.size()) {
         result.push_back(stack);
         return;
     }
-    int digit = digits[start] - '0';
+    int digit      = digits[start] - '0';
     string letters = letters_map[digit];
     for (int j = 0; j < letters.size(); j++) {
         stack.push_back(letters[j]);
-        backtracking_letter_combination(start + 1, digits, result, stack,
-                                        letters_map);
+        backtracking_letter_combination(start + 1, digits, result, stack, letters_map);
         stack.pop_back();
     }
 }
@@ -376,26 +343,25 @@ void backtracking_letter_combination(int start, string &digits,
 vector<string> Solution::letterCombinations(string digits) {
     vector<string> result;
 
-    if (digits.size() == 0)
-        return result;
+    if (digits.size() == 0) return result;
     // 使用string 数组构建map
-    string letters_map[10] = {"",    "",    "abc",  "def", "ghi",
-                              "jkl", "mno", "pqrs", "tuv", "wxyz"};
-    int n = digits.size();
+    string letters_map[10] = { "", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz" };
+    int n                  = digits.size();
     string stack;
     backtracking_letter_combination(0, digits, result, stack, letters_map);
     return result;
 }
 
-void backtracking_combination_sum(vector<int> &candidate, int target, int begin,
+void backtracking_combination_sum(vector<int> &candidate,
+                                  int target,
+                                  int begin,
                                   vector<vector<int>> &result,
                                   vector<int> &stack) {
     if (target == 0) {
         result.push_back(stack);
         return;
     }
-    if (target < 0)
-        return;
+    if (target < 0) return;
     // 会产生排列结果，例如[[2,2,2,2],[2,3,3],[3,2,3],[3,3,2],[3,5],[5,3]]
     // for (int i : candidate) {
     //     stack.push_back(i);
@@ -416,24 +382,24 @@ void backtracking_combination_sum(vector<int> &candidate, int target, int begin,
     }
 }
 
-vector<vector<int>> Solution::combinationSum(vector<int> &candidates,
-                                             int target) {
+vector<vector<int>> Solution::combinationSum(vector<int> &candidates, int target) {
     vector<vector<int>> result;
     vector<int> stack;
     backtracking_combination_sum(candidates, target, 0, result, stack);
     return result;
 }
 
-void backtracking_combination_sum_2(vector<pair<int, int>> &freq, int pos,
-                                    int target, vector<vector<int>> &result,
+void backtracking_combination_sum_2(vector<pair<int, int>> &freq,
+                                    int pos,
+                                    int target,
+                                    vector<vector<int>> &result,
                                     vector<int> &stack) {
     if (target == 0) {
         result.push_back(stack);
         return;
     }
     // 考虑边界条件需要考虑清楚，不然容易死循环
-    if (target < 0 || pos == freq.size())
-        return;
+    if (target < 0 || pos == freq.size()) return;
 
     // 不选择当前数字
     backtracking_combination_sum_2(freq, pos + 1, target, result, stack);
@@ -454,8 +420,7 @@ void backtracking_combination_sum_2(vector<pair<int, int>> &freq, int pos,
     }
 }
 
-vector<vector<int>> Solution::combinationSum2(vector<int> &candidates,
-                                              int target) {
+vector<vector<int>> Solution::combinationSum2(vector<int> &candidates, int target) {
     // 方案一：考虑如何在递归的过程中进行去重
     // 方案二：先将candidates进行分组，然后再回溯
     vector<vector<int>> result;
@@ -475,15 +440,11 @@ vector<vector<int>> Solution::combinationSum2(vector<int> &candidates,
 
 bool is_palindrome(const string &s, int start, int end) {
     for (int i = start, j = end; i < j; i++, j--) {
-        if (s[i] != s[j]) {
-            return false;
-        }
+        if (s[i] != s[j]) { return false; }
     }
     return true;
 }
-void backtracking_partition(const string &s, int pos,
-                            vector<vector<string>> &result,
-                            vector<string> &stack) {
+void backtracking_partition(const string &s, int pos, vector<vector<string>> &result, vector<string> &stack) {
     // 递归的结束条件
     if (pos >= s.size()) {
         result.push_back(stack);
@@ -510,29 +471,21 @@ vector<vector<string>> Solution::str_partition(string s) {
 }
 
 bool is_valid_ip_address(const string &s) {
-    if (s.size() == 0)
-        return false;
-    if (s.size() > 1 && s[0] == '0') {
-        return false;
-    }
+    if (s.size() == 0) return false;
+    if (s.size() > 1 && s[0] == '0') { return false; }
     int num = 0;
     if (s.size() > 1) {
         for (int i = 0; i < s.size(); i++) {
-            if (s[i] > '9' || s[i] < '0') {
-                return false;
-            }
+            if (s[i] > '9' || s[i] < '0') { return false; }
             num = num * 10 + (s[i] - '0');
-            if (num > 255)
-                return false;
+            if (num > 255) return false;
         }
         // 值不能大于255
     }
     return true;
 }
 
-void backtracking_restore_ip_addresses(const string &s, int pos,
-                                       vector<string> &result,
-                                       vector<string> &stack) {
+void backtracking_restore_ip_addresses(const string &s, int pos, vector<string> &result, vector<string> &stack) {
     // 递归的终止条件
     if (pos >= s.size()) {
         if (stack.size() == 4) {
@@ -565,8 +518,7 @@ vector<string> Solution::restoreIpAddresses(string s) {
     return result;
 }
 
-void backtracking_subsets(vector<int> &nums, int pos,
-                          vector<vector<int>> &result, vector<int> &stack) {
+void backtracking_subsets(vector<int> &nums, int pos, vector<vector<int>> &result, vector<int> &stack) {
     result.push_back(stack);
     for (int i = pos; i < nums.size(); i++) {
         stack.push_back(nums[i]);
@@ -584,8 +536,10 @@ vector<vector<int>> Solution::subsets(vector<int> &nums) {
     return result;
 }
 
-void backtracking_subsets_dup(vector<int> &nums, int pos,
-                              vector<vector<int>> &result, vector<bool> &used,
+void backtracking_subsets_dup(vector<int> &nums,
+                              int pos,
+                              vector<vector<int>> &result,
+                              vector<bool> &used,
                               vector<int> stack) {
     result.push_back(stack);
     for (int i = pos; i < nums.size(); i++) {
@@ -593,9 +547,7 @@ void backtracking_subsets_dup(vector<int> &nums, int pos,
         // 的递归结果必然包含在第i的递归结果中）
         // used[i - 1] == true，说明同一树支candidates[i - 1]使用过
         // used[i - 1] == false，说明同一树层candidates[i - 1]使用过,
-        if (i > 0 && nums[i] == nums[i - 1] && used[i - 1] == false) {
-            continue;
-        }
+        if (i > 0 && nums[i] == nums[i - 1] && used[i - 1] == false) { continue; }
         stack.push_back(nums[i]);
         used[i] = true;
         backtracking_subsets_dup(nums, i + 1, result, used, stack);
@@ -618,13 +570,9 @@ vector<vector<int>> Solution::subsetsWithDup(vector<int> &nums) {
     return result;
 }
 
-void backtracking_find_subsequences(vector<int> &nums, int pos,
-                                    vector<vector<int>> &result,
-                                    vector<int> &stack) {
+void backtracking_find_subsequences(vector<int> &nums, int pos, vector<vector<int>> &result, vector<int> &stack) {
     // 至少需要两个元素
-    if (stack.size() > 1) {
-        result.push_back(stack);
-    }
+    if (stack.size() > 1) { result.push_back(stack); }
 
     std::unordered_set<int> set;
     for (int i = pos; i < nums.size(); i++) {
@@ -664,10 +612,8 @@ vector<vector<int>> Solution::findSubsequences(vector<int> &nums) {
     return result;
 }
 
-void backtracking_permute(vector<int> nums, vector<bool> &used,
-                          vector<vector<int>> &result, vector<int> &stack) {
-    if (stack.size() == nums.size())
-        result.push_back(stack);
+void backtracking_permute(vector<int> nums, vector<bool> &used, vector<vector<int>> &result, vector<int> &stack) {
+    if (stack.size() == nums.size()) result.push_back(stack);
 
     for (int i = 0; i < nums.size(); i++) {
         if (used[i] == false) {
@@ -688,7 +634,8 @@ vector<vector<int>> Solution::permute(vector<int> &nums) {
     return result;
 }
 
-void backtracking_permute_unique(vector<int> &nums, vector<bool> &used,
+void backtracking_permute_unique(vector<int> &nums,
+                                 vector<bool> &used,
                                  vector<vector<int>> &result,
                                  vector<int> &stack) {
     if (stack.size() == nums.size()) {
@@ -728,16 +675,11 @@ vector<vector<int>> Solution::permuteUnique(vector<int> &nums) {
     return result;
 }
 
-vector<string> hierholzer_find_itinerary(vector<vector<string>> &tickets,
-                                         string &vertex) {
+vector<string> hierholzer_find_itinerary(vector<vector<string>> &tickets, string &vertex) {
     vector<string> result;
     // 先构建图(图的存储方案),欧拉半图
-    std::unordered_map<string, std::priority_queue<string, vector<string>,
-                                                   std::greater<string>>>
-        g;
-    for (auto t : tickets) {
-        g[t[0]].push(t[1]);
-    }
+    std::unordered_map<string, std::priority_queue<string, vector<string>, std::greater<string>>> g;
+    for (auto t : tickets) { g[t[0]].push(t[1]); }
 
     std::stack<string> cpath;
     std::stack<string> epath;
@@ -773,17 +715,13 @@ vector<vector<string>> Solution::solveNQueens(int n) {
 
     std::function<bool(int, int)> is_valid = [&](int row, int column) {
         // 第零行随便放
-        if (row == 0)
-            return true;
+        if (row == 0) return true;
         for (int R = 0; R < row; R++) {
             int C = stack[R];
             // 不能处在同一列
-            if (column == C)
-                return false;
+            if (column == C) return false;
             // 不能再同一斜列
-            if ((row + column) == (R + C) || (R - C) == (row - column)) {
-                return false;
-            }
+            if ((row + column) == (R + C) || (R - C) == (row - column)) { return false; }
         }
         return true;
     };
@@ -795,8 +733,7 @@ vector<vector<string>> Solution::solveNQueens(int n) {
             vector<string> board(n);
             for (int i = 0; i < stack.size(); ++i) {
                 // 注意单引号和双引号的区别
-                board[i] =
-                    string(stack[i], '.') + 'Q' + string(n - 1 - stack[i], '.');
+                board[i] = string(stack[i], '.') + 'Q' + string(n - 1 - stack[i], '.');
             }
             result.emplace_back(board);
         }
@@ -819,76 +756,64 @@ void Solution::solveSudoku(vector<vector<char>> &board) {
     // 注意容易超时
 
     // 用于判断当前位置填入的数是否有效
-    std::function<bool(int row, int column, char c)> is_valid =
-        [&](int row, int column, char c) {
-            // 先判断是数字0-9
-            if ((c - '0') <= 9 && (c - '0') > 0) {
-                // 行
-                for (int n = 0; n < board[row].size(); ++n) {
-                    if (c == board[row][n]) {
-                        return false;
-                    }
+    std::function<bool(int row, int column, char c)> is_valid = [&](int row, int column, char c) {
+        // 先判断是数字0-9
+        if ((c - '0') <= 9 && (c - '0') > 0) {
+            // 行
+            for (int n = 0; n < board[row].size(); ++n) {
+                if (c == board[row][n]) { return false; }
+            }
+            // 列
+            for (int n = 0; n < board.size(); n++) {
+                if (c == board[n][column]) { return false; }
+            }
+            // 3*3的正方形中只能出现一次
+            // 先求解行列的范围
+            int R = (row / 3) * 3;
+            int C = (column / 3) * 3;
+            for (int i = R; i < R + 3; i++) {
+                for (int j = C; j < C + 3; j++) {
+                    if (c == board[i][j]) return false;
                 }
-                // 列
-                for (int n = 0; n < board.size(); n++) {
-                    if (c == board[n][column]) {
-                        return false;
-                    }
-                }
-                // 3*3的正方形中只能出现一次
-                // 先求解行列的范围
-                int R = (row / 3) * 3;
-                int C = (column / 3) * 3;
-                for (int i = R; i < R + 3; i++) {
-                    for (int j = C; j < C + 3; j++) {
-                        if (c == board[i][j])
-                            return false;
-                    }
-                }
-                return true;
+            }
+            return true;
 
-            } else {
-                return false;
-            }
-        };
-
-    std::function<bool(int row, int column)> backtracking_solve_sudoku =
-        [&](int row, int column) {
-            char value[] = "123456789";
-            if (column == board[0].size()) {
-                // 需要注意便利顺序
-                row++;
-                column = 0;
-                if (row == board.size()) {
-                    return true;
-                }
-            }
-            if (board[row][column] != '.') {
-                // 直接跳过当前位置,前进一位
-                return backtracking_solve_sudoku(row, column + 1);
-            }
-            for (int i = 0; i < 9; i++) {
-                if (is_valid(row, column, value[i])) {
-                    board[row][column] = value[i];
-                    if (backtracking_solve_sudoku(row, column + 1))
-                        return true;
-                    // 错误需要回溯
-                    board[row][column] = '.';
-                }
-            }
+        } else {
             return false;
-        };
+        }
+    };
+
+    std::function<bool(int row, int column)> backtracking_solve_sudoku = [&](int row, int column) {
+        char value[] = "123456789";
+        if (column == board[0].size()) {
+            // 需要注意便利顺序
+            row++;
+            column = 0;
+            if (row == board.size()) { return true; }
+        }
+        if (board[row][column] != '.') {
+            // 直接跳过当前位置,前进一位
+            return backtracking_solve_sudoku(row, column + 1);
+        }
+        for (int i = 0; i < 9; i++) {
+            if (is_valid(row, column, value[i])) {
+                board[row][column] = value[i];
+                if (backtracking_solve_sudoku(row, column + 1)) return true;
+                // 错误需要回溯
+                board[row][column] = '.';
+            }
+        }
+        return false;
+    };
     backtracking_solve_sudoku(0, 0);
 }
 
 vector<int> Solution::preorderTraversal(TreeNode *root) {
     // 递归方式实现
     vector<int> result;
-    if (root == nullptr)
-        return result;
+    if (root == nullptr) return result;
     std::function<void(TreeNode *)> dfs = [&](TreeNode *cur) {
-        if (cur == NULL)
-            return;
+        if (cur == NULL) return;
         result.emplace_back(cur->val);
         dfs(cur->left);
         dfs(cur->right);
@@ -916,8 +841,7 @@ vector<int> Solution::inorderTraversal(TreeNode *root) {
 
     // 迭代式解法
     vector<int> result;
-    if (root == nullptr)
-        return result;
+    if (root == nullptr) return result;
     std::stack<TreeNode *> st;
     // 当前的节点指针
     TreeNode *cur = root;
@@ -943,18 +867,15 @@ vector<int> Solution::inorderTraversal(TreeNode *root) {
 vector<int> Solution::postorderTraversal(TreeNode *root) {
     // 利用栈,采用迭代的方式
     vector<int> result;
-    if (root == nullptr)
-        return result;
+    if (root == nullptr) return result;
     std::stack<TreeNode *> st;
     st.push(root);
     while (!st.empty()) {
         TreeNode *top = st.top();
         result.emplace_back(top->val);
         st.pop();
-        if (top->left)
-            st.push(top->left);
-        if (top->right)
-            st.push(top->right);
+        if (top->left) st.push(top->left);
+        if (top->right) st.push(top->right);
     }
 
     std::reverse(result.begin(), result.end());
@@ -963,8 +884,7 @@ vector<int> Solution::postorderTraversal(TreeNode *root) {
 
 vector<vector<int>> Solution::levelOrder(TreeNode *root) {
     vector<vector<int>> result;
-    if (root == nullptr)
-        return result;
+    if (root == nullptr) return result;
     std::queue<TreeNode *> que;
     que.push(root);
     while (!que.empty()) {
@@ -976,10 +896,8 @@ vector<vector<int>> Solution::levelOrder(TreeNode *root) {
             path.emplace_back(node->val);
             que.pop();
             // 非空的时候，添加到队列
-            if (node->left)
-                que.push(node->left);
-            if (node->right)
-                que.push(node->right);
+            if (node->left) que.push(node->left);
+            if (node->right) que.push(node->right);
         }
         result.emplace_back(path);
     }
@@ -988,8 +906,7 @@ vector<vector<int>> Solution::levelOrder(TreeNode *root) {
 
 vector<vector<int>> Solution::levelOrderBottom(TreeNode *root) {
     vector<vector<int>> result;
-    if (root == nullptr)
-        return result;
+    if (root == nullptr) return result;
     std::queue<TreeNode *> que;
     que.push(root);
     while (!que.empty()) {
@@ -1001,10 +918,8 @@ vector<vector<int>> Solution::levelOrderBottom(TreeNode *root) {
             path.emplace_back(node->val);
             que.pop();
             // 非空的时候，添加到队列
-            if (node->left)
-                que.push(node->left);
-            if (node->right)
-                que.push(node->right);
+            if (node->left) que.push(node->left);
+            if (node->right) que.push(node->right);
         }
         result.emplace_back(path);
     }
@@ -1014,8 +929,7 @@ vector<vector<int>> Solution::levelOrderBottom(TreeNode *root) {
 
 vector<int> Solution::rightSideView(TreeNode *root) {
     vector<int> result;
-    if (root == nullptr)
-        return result;
+    if (root == nullptr) return result;
     std::queue<TreeNode *> que;
     que.push(root);
     while (!que.empty()) {
@@ -1027,10 +941,8 @@ vector<int> Solution::rightSideView(TreeNode *root) {
             path.emplace_back(node->val);
             que.pop();
             // 非空的时候，添加到队列
-            if (node->left)
-                que.push(node->left);
-            if (node->right)
-                que.push(node->right);
+            if (node->left) que.push(node->left);
+            if (node->right) que.push(node->right);
         }
         result.emplace_back(path.back());
     }
@@ -1040,21 +952,18 @@ vector<int> Solution::rightSideView(TreeNode *root) {
 
 vector<double> Solution::averageOfLevels(TreeNode *root) {
     vector<double> result;
-    if (root == nullptr)
-        return result;
+    if (root == nullptr) return result;
     std::queue<TreeNode *> que;
     que.push(root);
     while (!que.empty()) {
         double sum = 0;
-        int nums = que.size();
+        int nums   = que.size();
         for (int i = 0; i < nums; i++) {
             TreeNode *node = que.front();
             sum += node->val;
             que.pop();
-            if (node->left)
-                que.push(node->left);
-            if (node->right)
-                que.push(node->right);
+            if (node->left) que.push(node->left);
+            if (node->right) que.push(node->right);
         }
         double average = sum / nums;
         result.emplace_back(average);
@@ -1078,43 +987,38 @@ TreeNode *Solution::invertTree(TreeNode *root) {
     // return root;
 
     // 采用迭代的方式进行尝试
-    if (root == nullptr)
-        return root;
+    if (root == nullptr) return root;
     std::stack<TreeNode *> st;
     st.push(root);
     while (!st.empty()) {
         TreeNode *node = st.top();
         TreeNode *temp = node->left;
-        node->left = node->right;
-        node->right = temp;
+        node->left     = node->right;
+        node->right    = temp;
         st.pop();
-        if (node->right)
-            st.push(node->right);
-        if (node->left)
-            st.push(node->left);
+        if (node->right) st.push(node->right);
+        if (node->left) st.push(node->left);
     }
     return root;
 }
 bool Solution::isSymmetric(TreeNode *root) {
-    if (root == nullptr)
-        return true;
+    if (root == nullptr) return true;
     // 需要递归判断左右子树是个否相等,核心是后序遍历
-    std::function<bool(TreeNode *, TreeNode *)> dfs_compare =
-        [&](TreeNode *left, TreeNode *right) {
-            if (left == nullptr && right != nullptr)
-                return false;
-            else if (left != nullptr && right == nullptr)
-                return false;
-            else if (left == nullptr && right == nullptr)
-                return true;
-            else if (left->val != right->val)
-                return false;
+    std::function<bool(TreeNode *, TreeNode *)> dfs_compare = [&](TreeNode *left, TreeNode *right) {
+        if (left == nullptr && right != nullptr)
+            return false;
+        else if (left != nullptr && right == nullptr)
+            return false;
+        else if (left == nullptr && right == nullptr)
+            return true;
+        else if (left->val != right->val)
+            return false;
 
-            bool l = dfs_compare(left->left, right->right);
-            bool r = dfs_compare(left->right, right->left);
+        bool l = dfs_compare(left->left, right->right);
+        bool r = dfs_compare(left->right, right->left);
 
-            return l && r;
-        };
+        return l && r;
+    };
 
     return dfs_compare(root->left, root->right);
     // 采用非递归的方式,类似层序遍历,但是需要注意,进入队列的顺序
@@ -1122,8 +1026,7 @@ bool Solution::isSymmetric(TreeNode *root) {
 
 int Solution::maxDepth(TreeNode *root) {
     // 采用迭代的方式计算,层序遍历
-    if (root == nullptr)
-        return 0;
+    if (root == nullptr) return 0;
     int depth = 0;
     std::queue<TreeNode *> que;
     que.push(root);
@@ -1132,10 +1035,8 @@ int Solution::maxDepth(TreeNode *root) {
         for (int i = 0; i < size; ++i) {
             TreeNode *node = que.front();
             que.pop();
-            if (node->left)
-                que.push(node->left);
-            if (node->right)
-                que.push(node->right);
+            if (node->left) que.push(node->left);
+            if (node->right) que.push(node->right);
         }
         depth++;
     }
@@ -1143,8 +1044,7 @@ int Solution::maxDepth(TreeNode *root) {
 }
 
 int Solution::maxDepth_N(Node *root) {
-    if (root == nullptr)
-        return 0;
+    if (root == nullptr) return 0;
     int depth = 0;
     std::queue<Node *> que;
     que.push(root);
@@ -1154,8 +1054,7 @@ int Solution::maxDepth_N(Node *root) {
             Node *node = que.front();
             que.pop();
             for (int j = 0; j < node->children.size(); j++) {
-                if (node->children[j])
-                    que.push(node->children[j]);
+                if (node->children[j]) que.push(node->children[j]);
             }
         }
         depth++;
@@ -1164,12 +1063,10 @@ int Solution::maxDepth_N(Node *root) {
 }
 
 int Solution::minDepth(TreeNode *root) {
-    if (root == nullptr)
-        return 0;
+    if (root == nullptr) return 0;
     std::function<int(TreeNode *)> dfs = [&](TreeNode *node) {
         // 如果当前节点为空,最小高度为0
-        if (node == nullptr)
-            return 0;
+        if (node == nullptr) return 0;
         if (node->left == nullptr && node->right != nullptr) {
             int right = dfs(node->right);
             return right + 1;
@@ -1177,7 +1074,7 @@ int Solution::minDepth(TreeNode *root) {
             int left = dfs(node->left);
             return left + 1;
         } else if (node->left != nullptr && node->right != nullptr) {
-            int left = dfs(node->left);
+            int left  = dfs(node->left);
             int right = dfs(node->right);
             // 后序遍历的体现
             return std::min(left, right) + 1;
@@ -1191,18 +1088,14 @@ int Solution::minDepth(TreeNode *root) {
 bool Solution::isBalanced(TreeNode *root) {
     // 重点是如何构建递归函数的返回值,便于后序遍历计算机高度差
     std::function<int(TreeNode *)> get_depth = [&](TreeNode *node) {
-        if (node == nullptr)
-            return 0;
+        if (node == nullptr) return 0;
         // 递归终止条件
 
         int left_depth = get_depth(node->left);
-        if (left_depth == -1)
-            return -1;
+        if (left_depth == -1) return -1;
         int right_depth = get_depth(node->right);
-        if (right_depth == -1)
-            return -1;
-        if (std::abs(left_depth - right_depth) > 1)
-            return -1;
+        if (right_depth == -1) return -1;
+        if (std::abs(left_depth - right_depth) > 1) return -1;
         return 1 + std::max(left_depth, right_depth);
     };
 
@@ -1213,14 +1106,12 @@ bool Solution::isValidBST(TreeNode *root) {
     // 利用中序遍历,判断递增
     // prev初始化需要设置
     // TODO 梳理下节点非空的判断场景
-    TreeNode *prev = nullptr;
+    TreeNode *prev                           = nullptr;
     std::function<bool(TreeNode * node)> dfs = [&](TreeNode *node) -> bool {
-        if (node == nullptr)
-            return true;
+        if (node == nullptr) return true;
         bool left = dfs(node->left);
-        if (prev != nullptr && node->val <= prev->val)
-            return false;
-        prev = node;
+        if (prev != nullptr && node->val <= prev->val) return false;
+        prev       = node;
         bool right = dfs(node->right);
         return left && right;
     };
@@ -1231,8 +1122,7 @@ vector<string> binaryTreePaths(TreeNode *root) {
     //  这里注意边界条件
     vector<string> result;
     vector<int> path;
-    if (root == nullptr)
-        return result;
+    if (root == nullptr) return result;
     std::function<void(TreeNode *)> dfs = [&](TreeNode *node) {
         path.push_back(node->val);
 
@@ -1265,14 +1155,10 @@ vector<int> Solution::findDisappearedNumbers(vector<int> &nums) {
     vector<int> result;
     for (int i = 0; i < nums.size(); i++) {
         int pos = std::abs(nums[i]) - 1;
-        if (nums[pos] > 0) {
-            nums[pos] = -nums[pos];
-        }
+        if (nums[pos] > 0) { nums[pos] = -nums[pos]; }
     }
     for (int i = 0; i < nums.size(); i++) {
-        if (nums[i] > 0) {
-            result.emplace_back(nums[i] + 1);
-        }
+        if (nums[i] > 0) { result.emplace_back(nums[i] + 1); }
     }
     return result;
 }
@@ -1294,9 +1180,7 @@ string Solution::removeDuplicates(string s) {
 
     std::reverse(result.begin(), result.end());
     string output;
-    for (int i = 0; i < result.size(); i++) {
-        output += result[i];
-    }
+    for (int i = 0; i < result.size(); i++) { output += result[i]; }
     return output;
 }
 vector<string> Solution::topKFrequent(vector<string> &words, int k) {
@@ -1310,9 +1194,7 @@ vector<string> Solution::topKFrequent(vector<string> &words, int k) {
     auto compare = [](std::pair<string, int> &a, std::pair<string, int> &b) {
         return a.second == b.second ? a.first < b.first : a.second > b.second;
     };
-    std::priority_queue<std::pair<string, int>, vector<std::pair<string, int>>,
-                        decltype(compare)>
-        que(compare);
+    std::priority_queue<std::pair<string, int>, vector<std::pair<string, int>>, decltype(compare)> que(compare);
     // Note that the Compare parameter is defined such that it returns true if
     // its first argument comes before its second argument in a weak ordering.
     // come before 说明优先级高 But because the priority queue outputs largest
@@ -1324,9 +1206,7 @@ vector<string> Solution::topKFrequent(vector<string> &words, int k) {
     // 大根堆
     for (auto &p : freq) {
         que.emplace(std::pair<string, int>(p.first, p.second));
-        if (que.size() > k) {
-            que.pop();
-        }
+        if (que.size() > k) { que.pop(); }
     }
     for (int i = 0; i < k - 1; i++) {
         result[k - i - i] = que.top().first;
@@ -1337,18 +1217,14 @@ vector<string> Solution::topKFrequent(vector<string> &words, int k) {
 
 int Solution::sumOfLeftLeaves(TreeNode *root) {
     int sum = 0;
-    if (root == nullptr)
-        return sum;
+    if (root == nullptr) return sum;
 
     std::function<void(TreeNode *)> dfs = [&](TreeNode *node) {
-        if (node != nullptr && node->left != nullptr &&
-            node->left->left == nullptr && node->left->right == nullptr) {
+        if (node != nullptr && node->left != nullptr && node->left->left == nullptr && node->left->right == nullptr) {
             sum += node->left->val;
         }
-        if (node->left)
-            dfs(node->left);
-        if (node->right)
-            dfs(node->right);
+        if (node->left) dfs(node->left);
+        if (node->right) dfs(node->right);
     };
     dfs(root);
     return sum;
@@ -1356,8 +1232,7 @@ int Solution::sumOfLeftLeaves(TreeNode *root) {
 
 int Solution::findBottomLeftValue(TreeNode *root) {
     // 层序遍历方案
-    if (root == nullptr)
-        return 0;
+    if (root == nullptr) return 0;
     std::queue<TreeNode *> que;
     int value = 0;
     que.push(root);
@@ -1365,9 +1240,7 @@ int Solution::findBottomLeftValue(TreeNode *root) {
         int num = que.size();
         for (int i = 0; i < num; i++) {
             TreeNode *node = que.front();
-            if (i == 0) {
-                value = node->val;
-            }
+            if (i == 0) { value = node->val; }
             que.push(node->left);
             que.push(node->right);
             que.pop();
@@ -1381,25 +1254,20 @@ ListNode *Solution::mergeKLists(vector<ListNode *> &lists) {
     // 容易出现空指针的问题，需要注意[[1,3,2],[],[2,3]]
     auto compare = [](ListNode *a, ListNode *b) { return a->val > b->val; };
     // 大于返回True,优先级高的在后面，（priority_queue，为低优先级堆，根节点的优先级小于左右子节点的优先级）
-    std::priority_queue<ListNode *, vector<ListNode *>, decltype(compare)>
-        priority_que(compare);
-    ListNode *head = new ListNode();
+    std::priority_queue<ListNode *, vector<ListNode *>, decltype(compare)> priority_que(compare);
+    ListNode *head    = new ListNode();
     ListNode *current = head;
-    if (lists.empty()) {
-        return nullptr;
-    }
+    if (lists.empty()) { return nullptr; }
     for (int i = 0; i < lists.size(); i++) {
-        if (lists[i])
-            priority_que.push(lists[i]);
+        if (lists[i]) priority_que.push(lists[i]);
     }
     while (!priority_que.empty()) {
         ListNode *top = priority_que.top();
         // 前面的判断能够保证top非空,compare正常
         current->next = top;
-        current = top;
+        current       = top;
         priority_que.pop();
-        if (top && top->next)
-            priority_que.push(top->next);
+        if (top && top->next) priority_que.push(top->next);
     }
     return head->next;
     // 时间复杂度分析，优先队列的插入和删除O(logK),链表的遍历O(kN)，所以时间复杂度为O(kNlogK)
@@ -1407,8 +1275,7 @@ ListNode *Solution::mergeKLists(vector<ListNode *> &lists) {
 
 int Solution::widthOfBinaryTree(TreeNode *root) {
 
-    if (root == nullptr)
-        return 0;
+    if (root == nullptr) return 0;
     // 采用节点编号
     // overflow, 需要采用unsigned long long
     int64_t width = 0;
@@ -1422,11 +1289,9 @@ int Solution::widthOfBinaryTree(TreeNode *root) {
             std::pair<TreeNode *, nlp_int64_t> top = que.front();
             temp.push_back(top);
             if (top.first->left)
-                que.push(std::pair<TreeNode *, nlp_int64_t>(
-                    top.first->left, 2 * (top.second - start)));
+                que.push(std::pair<TreeNode *, nlp_int64_t>(top.first->left, 2 * (top.second - start)));
             if (top.first->right)
-                que.push(std::pair<TreeNode *, nlp_int64_t>(
-                    top.first->right, 2 * (top.second - start) + 1));
+                que.push(std::pair<TreeNode *, nlp_int64_t>(top.first->right, 2 * (top.second - start) + 1));
             que.pop();
         }
 
@@ -1437,82 +1302,73 @@ int Solution::widthOfBinaryTree(TreeNode *root) {
 
 TreeNode *Solution::buildTree(vector<int> &inorder, vector<int> &postorder) {
     // TODO 优化内存方案，可以使用index区间来代替
-    std::function<TreeNode *(vector<int> &, vector<int> &)> build =
-        [&](vector<int> &in, vector<int> &post) -> TreeNode * {
-        if (post.size() == 0)
-            return nullptr;
+    std::function<TreeNode *(vector<int> &, vector<int> &)> build = [&](vector<int> &in,
+                                                                        vector<int> &post) -> TreeNode * {
+        if (post.size() == 0) return nullptr;
         int root_value = post[post.size() - 1];
         TreeNode *node = new TreeNode(root_value);
         int delimiter_index;
-        for (delimiter_index = 0; delimiter_index < in.size();
-             delimiter_index++) {
-            if (in[delimiter_index] == root_value)
-                break;
+        for (delimiter_index = 0; delimiter_index < in.size(); delimiter_index++) {
+            if (in[delimiter_index] == root_value) break;
         }
         vector<int> left_in(in.begin(), in.begin() + delimiter_index);
         vector<int> right_in(in.begin() + delimiter_index + 1, in.end());
         // 后序数组怎么切分,保持长度一致
         vector<int> left_post(post.begin(), post.begin() + delimiter_index);
         vector<int> right_post(post.begin() + delimiter_index, post.end() - 1);
-        TreeNode *left = build(left_in, left_post);
+        TreeNode *left  = build(left_in, left_post);
         TreeNode *right = build(right_in, right_post);
-        node->right = right;
-        node->left = left;
+        node->right     = right;
+        node->left      = left;
         return node;
     };
     return build(inorder, postorder);
 }
 
 TreeNode *Solution::mergeTrees(TreeNode *root1, TreeNode *root2) {
-    std::function<TreeNode *(TreeNode *, TreeNode *)> merge =
-        [&](TreeNode *r1, TreeNode *r2) -> TreeNode * {
-        if (r1 == nullptr && r2 == nullptr)
-            return nullptr;
+    std::function<TreeNode *(TreeNode *, TreeNode *)> merge = [&](TreeNode *r1, TreeNode *r2) -> TreeNode * {
+        if (r1 == nullptr && r2 == nullptr) return nullptr;
         // 存在非空节点
         int node_value;
         TreeNode *r1_left, *r1_right, *r2_left, *r2_right;
         if (r1 == nullptr && r2 != nullptr) {
             node_value = r2->val;
-            r1_left = nullptr;
-            r1_right = nullptr;
-            r2_left = r2->left;
-            r2_right = r2->right;
+            r1_left    = nullptr;
+            r1_right   = nullptr;
+            r2_left    = r2->left;
+            r2_right   = r2->right;
 
         } else if (r1 != nullptr && r2 == nullptr) {
             node_value = r1->val;
-            r1_left = r1->left;
-            r1_right = r1->right;
-            r2_left = nullptr;
-            r2_right = nullptr;
+            r1_left    = r1->left;
+            r1_right   = r1->right;
+            r2_left    = nullptr;
+            r2_right   = nullptr;
         } else {
             node_value = r1->val + r2->val;
-            r1_left = r1->left;
-            r1_right = r1->right;
-            r2_left = r2->left;
-            r2_right = r2->right;
+            r1_left    = r1->left;
+            r1_right   = r1->right;
+            r2_left    = r2->left;
+            r2_right   = r2->right;
         }
-        TreeNode *node = new TreeNode(node_value);
-        TreeNode *left = merge(r1_left, r2_left);
+        TreeNode *node  = new TreeNode(node_value);
+        TreeNode *left  = merge(r1_left, r2_left);
         TreeNode *right = merge(r1_right, r2_right);
-        node->left = left;
-        node->right = right;
+        node->left      = left;
+        node->right     = right;
         return node;
     };
     return merge(root1, root2);
 }
 TreeNode *Solution::searchBST(TreeNode *root, int val) {
-    if (root == nullptr || root->val == val)
-        return root;
-    if (root->val > val)
-        return searchBST(root->left, val);
-    if (root->val < val)
-        return searchBST(root->right, val);
+    if (root == nullptr || root->val == val) return root;
+    if (root->val > val) return searchBST(root->left, val);
+    if (root->val < val) return searchBST(root->right, val);
     // 如果没有找到
     return nullptr;
 }
 
-TreeNode *Solution::lowestCommonAncestor(TreeNode *root, TreeNode *p,
-                                         TreeNode *q) {
+TreeNode *Solution::lowestCommonAncestor(TreeNode *root, TreeNode *p, TreeNode *q) {
     std::function<bool(TreeNode *)> dfs = [&](TreeNode *cur) -> bool {
         // 后续遍历
         // 递归的终止条件
@@ -1529,8 +1385,7 @@ vector<int> Solution::dailyTemperatures(vector<int> &temperatures) {
             st.push(index);
         } else {
 
-            while (!st.empty() &&
-                   temperatures[index] > temperatures[st.top()]) {
+            while (!st.empty() && temperatures[index] > temperatures[st.top()]) {
                 st.pop();
 
                 result[st.top()] = index - st.top();
@@ -1544,7 +1399,7 @@ vector<int> Solution::dailyTemperatures(vector<int> &temperatures) {
 
 int Solution::countSubstrings(string s) {
     int num = 0;
-    int n = s.size();
+    int n   = s.size();
     // dp数组初始化,dp[i][j]表示起始位置为i，终止位置为j的字符串是否是回文串
     vector<vector<int>> dp(n, vector<int>(n, 0));
     // 递推公式dp[i][j]是否是回文字符串，取决于dp[i+1][j-1],所以需要注意遍历顺序
@@ -1572,58 +1427,46 @@ int Solution::findContentChildren(vector<int> &g, vector<int> &s) {
     int index = 0;
     for (int i = 0; i < s.size(); i++) {
         // 注意index的判断，需要先判断不能越界,因为饼干可以很多，人数可以很少
-        if (index < g.size() && s[i] >= g[index]) {
-            index++;
-        }
+        if (index < g.size() && s[i] >= g[index]) { index++; }
     }
 
     return index;
 }
-int Solution::wiggleMaxLength(vector<int>& nums){
-    vector<vector<int>> dp(nums.size(),vector<int>(2));
+int Solution::wiggleMaxLength(vector<int> &nums) {
+    vector<vector<int>> dp(nums.size(), vector<int>(2));
     // dp[i][0]表示以nums[i]结尾，序列呈现上升趋势的，子序列长度
     // dp[i][1]表示以nums[i]结尾，序列呈现下降趋势趋势的，子序列长度
-    dp[0][0]=dp[0][1]=1;
-    for (int i = 1; i < nums.size(); i++)
-    {
-        if(nums[i]==nums[i-1]){
-            dp[i][0]=dp[i-1][0];
-            dp[i][1]=dp[i-1][1];
-        }else{
-            if (nums[i]>nums[i-1])
-            {
-                dp[i][0]=dp[i-1][0];
-                dp[i][1]=std::max(dp[i-1][0]+1,dp[i-1][1]);
-            }else if (nums[i]<nums[i-1])
-            {
-                dp[i][0]=std::max(dp[i-1][1]+1,dp[i-1][0]);
-                dp[i][1]=dp[i-1][1];
+    dp[0][0] = dp[0][1] = 1;
+    for (int i = 1; i < nums.size(); i++) {
+        if (nums[i] == nums[i - 1]) {
+            dp[i][0] = dp[i - 1][0];
+            dp[i][1] = dp[i - 1][1];
+        } else {
+            if (nums[i] > nums[i - 1]) {
+                dp[i][0] = dp[i - 1][0];
+                dp[i][1] = std::max(dp[i - 1][0] + 1, dp[i - 1][1]);
+            } else if (nums[i] < nums[i - 1]) {
+                dp[i][0] = std::max(dp[i - 1][1] + 1, dp[i - 1][0]);
+                dp[i][1] = dp[i - 1][1];
             }
-
         }
-        
     }
-    return std::max(dp[nums.size()-1][0],dp[nums.size()-1][1]);
+    return std::max(dp[nums.size() - 1][0], dp[nums.size() - 1][1]);
 }
 
- int Solution::lengthOfLIS(vector<int>& nums){
-    int n=nums.size();
-     vector<int> dp(n,1);
+int Solution::lengthOfLIS(vector<int> &nums) {
+    int n = nums.size();
+    vector<int> dp(n, 1);
     // dp[i]表示以nums[i]结尾的最长递增子序列的长度
-    dp[0]=1;
+    dp[0] = 1;
     //初始化
-    for (int i = 0; i <n; i++)
-    {
-        for (int j = 0; j<i; j++)
-        {
-            if(nums[j]<nums[i]){
-            dp[i]=std::max(dp[i],dp[j]+1);}
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < i; j++) {
+            if (nums[j] < nums[i]) { dp[i] = std::max(dp[i], dp[j] + 1); }
         }
-        
     }
-    return *std::max_element(dp.begin(),dp.end());
-
- }
+    return *std::max_element(dp.begin(), dp.end());
+}
 
 int Solution::integerBreak(int n) {
     // 不同于完全背包问题，注意动态规划的递推公式
@@ -1631,131 +1474,172 @@ int Solution::integerBreak(int n) {
     // 初始化
     dp[1] = dp[2] = 1;
     for (int j = 2; j <= n; j++) {
-        for (int i = 1; i <= j; i++) {
-            dp[j] = std::max(dp[j], std::max(i*(j-i),dp[j - i] * i));
-        }
+        for (int i = 1; i <= j; i++) { dp[j] = std::max(dp[j], std::max(i * (j - i), dp[j - i] * i)); }
     }
 
     return dp[n];
 }
 
- int Solution::maxSubArray(vector<int>& nums){
-    int result=INT_MIN;
-    int count=0;
+int Solution::maxSubArray(vector<int> &nums) {
+    int result = INT_MIN;
+    int count  = 0;
     // 双指针，起始位置必是正数
-    for(int i=0;i<nums.size();i++){
-        count+=nums[i];
-        if(count>=result){
+    for (int i = 0; i < nums.size(); i++) {
+        count += nums[i];
+        if (count >= result) {
             //起始位置不变，更新end 位置
-            result=count;
+            result = count;
         }
         //更新begin位置
-        if(count<=0){
-            result=0;
-        }
+        if (count <= 0) { result = 0; }
     }
 
     return result;
- }
+}
 
-string Solution::minWindow(string s, string t){
-    std::unordered_map<char,int> windows,need;
-    for(char c:t) need[c]++;
-    int right=0,left=0; //左闭右开的区间
-    int valid=0;
+string Solution::minWindow(string s, string t) {
+    std::unordered_map<char, int> windows, need;
+    for (char c : t) need[c]++;
+    int right = 0, left = 0;//左闭右开的区间
+    int valid = 0;
     //判断窗口内是否有有效解的
-    int start=0,len=INT_MAX;
+    int start = 0, len = INT_MAX;
     //记录最小子串的起始位置
-    while(right<s.size()){
-        char c=s[right];
+    while (right < s.size()) {
+        char c = s[right];
         right++;
-        if(need.count(c)){
+        if (need.count(c)) {
             windows[c]++;
-            if(windows[c]==need[c]){
-                valid++;
-            }
+            if (windows[c] == need[c]) { valid++; }
         }
-        while(valid==need.size()){
+        while (valid == need.size()) {
             // 更新最小解的内容
             //更新内容
-            if(right-left<len){
-                start=left;
-                len=right-left;
+            if (right - left < len) {
+                start = left;
+                len   = right - left;
             }
-            char d=s[left];
+            char d = s[left];
             left++;
-            if(need.count(d)){
-                if(windows[d]==need[d]){
+            if (need.count(d)) {
+                if (windows[d] == need[d]) {
                     // 有效数目减少
                     valid--;
                 }
                 windows[d]--;
             }
-            }
+        }
     }
-  // 返回最小覆盖子串
+    // 返回最小覆盖子串
     return len == INT_MAX ? "" : s.substr(start, len);
 }
 
 
- bool Solution::canJump(vector<int>& nums){
+bool Solution::canJump(vector<int> &nums) {
     //确定每次的步长
-    int step=0;
-    if(nums.size()==1) return true;
-    for(int i=0;i<=step;i++){
-        step=std::max(step,nums[i]+i);
-        if (step>nums.size()-1) return true;
+    int step = 0;
+    if (nums.size() == 1) return true;
+    for (int i = 0; i <= step; i++) {
+        step = std::max(step, nums[i] + i);
+        if (step > nums.size() - 1) return true;
     }
     return false;
+}
 
- }
-
-int Solution::jump(vector<int> &nums){
+int Solution::jump(vector<int> &nums) {
     //需要保证使用最小的步数和最大的距离
-    int n=nums.size();
-    if (n==1) return 1;
-    int steps=0;
+    int n = nums.size();
+    if (n == 1) return 1;
+    int steps = 0;
     //最少跳跃的步数
-    int current_distance=0;
+    int current_distance = 0;
     //当前能到达的最远位置
-    int next_distance=0;
+    int next_distance = 0;
     //下一步能到达的最远位置
-    for(int i=0;i<nums.size();i++){
+    for (int i = 0; i < nums.size(); i++) {
         //下一步的最远下标
-        next_distance=std::max(next_distance,nums[i]+i);
-        if(i==current_distance){
+        next_distance = std::max(next_distance, nums[i] + i);
+        if (i == current_distance) {
             // 到达当前最大的位置的时候
-            if(current_distance!=nums.size()-1){
+            if (current_distance != nums.size() - 1) {
                 steps++;
-                current_distance=next_distance;
+                current_distance = next_distance;
                 //多增加几次判断
-                if(next_distance>nums.size()-1) break;
-            }else {
-            break;
+                if (next_distance > nums.size() - 1) break;
+            } else {
+                break;
             }
         }
     }
     return steps;
-
 }
 
- int Solution::largestSumAfterKNegations(vector<int>& nums, int k){
+int Solution::largestSumAfterKNegations(vector<int> &nums, int k) {
     //使用最小堆，每次将堆顶的数据转化，重新插入堆
-    std::priority_queue<int,vector<int>,std::greater<int>> min_heap(nums.begin(),nums.end());
-    while (k>0) {
-        int min_value=min_heap.top();
+    std::priority_queue<int, vector<int>, std::greater<int>> min_heap(nums.begin(), nums.end());
+    while (k > 0) {
+        int min_value = min_heap.top();
         min_heap.pop();
-        min_heap.push(-1*min_value);
+        min_heap.push(-1 * min_value);
         k--;
     }
-    int sum=0;
-    while(!min_heap.empty()){
-        sum+=min_heap.top();
+    int sum = 0;
+    while (!min_heap.empty()) {
+        sum += min_heap.top();
         min_heap.pop();
     }
     return sum;
- }
+}
+
+int Solution::calculate(string s) {
+    //栈+递归。栈用于处理操作符和计算，递归用于处理括号。
+    //参考
+    // https://leetcode.cn/problems/basic-calculator/solutions/2568955/chu-li-ji-suan-qi-de-yi-ban-si-lu-ke-jie-dxkv/
+    int index                       = 0;
+    std::function<int(string)> calc = [&](string s) -> int {
+        int ans  = 0;
+        int num  = 0;
+        char ops = '+';
+        std::stack<int> nums;
+        while (index < s.size()) {
+            char c = s[index];
+            if (std::isdigit(c)) { num = 10 * num + (c - '0'); }
+            if (c == '(') { num = calc(s); }
+            if (!std::isdigit(c) || index == s.size() - 1) {
+                int t = 0;
+                switch (ops) {
+                case '+':
+                    nums.push(num);
+                    break;
+                case '-':
+                    nums.push(-num);
+                    break;
+                case '*':
+                    t = nums.top();
+                    nums.pop();
+                    nums.push(t * num);
+                    break;
+                case '/':
+                    t = nums.top();
+                    nums.pop();
+                    nums.push(t / num);
+                    break;
+                }
+
+                num = 0;
+                ops = c;
+            }
+            if (c == ')') { break; }
+            index++;
+        }
+        while (!nums.empty()) {
+            ans += nums.top();
+            nums.pop();
+        }
+        return ans;
+    };
+    return calc(s);
+}
 
 
-
-} // namespace leetcode
+}// namespace leetcode
