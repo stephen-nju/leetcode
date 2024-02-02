@@ -1595,7 +1595,10 @@ int Solution::calculate(string s) {
     //栈+递归。栈用于处理操作符和计算，递归用于处理括号。
     //参考
     // https://leetcode.cn/problems/basic-calculator/solutions/2568955/chu-li-ji-suan-qi-de-yi-ban-si-lu-ke-jie-dxkv/
-    int index                       = 0;
+
+
+    int index = 0;
+    s.erase(std::remove(s.begin(), s.end(), ' '), s.end());
     std::function<int(string)> calc = [&](string s) -> int {
         int ans  = 0;
         int num  = 0;
@@ -1604,7 +1607,10 @@ int Solution::calculate(string s) {
         while (index < s.size()) {
             char c = s[index];
             if (std::isdigit(c)) { num = 10 * num + (c - '0'); }
-            if (c == '(') { num = calc(s); }
+            if (c == '(') {
+                index++;
+                num = calc(s);
+            }
             if (!std::isdigit(c) || index == s.size() - 1) {
                 int t = 0;
                 switch (ops) {

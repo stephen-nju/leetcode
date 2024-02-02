@@ -27,6 +27,6 @@ TEST_CASE("testing findSubsequences") {
 }
 
 TEST_CASE("testing calculate") {
-    int out = solution->calculate("1 + 1 ");
+    int out = solution->calculate("(1 + 1)* ( 1+1)");
     printf("calculate output=%d\n", out);
 }
