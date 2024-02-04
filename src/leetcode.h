@@ -25,7 +25,8 @@ typedef int64_t nlp_int64_t;
 
 namespace leetcode {
 
-struct ListNode {
+struct ListNode
+{
     int val;
     ListNode *next;
     ListNode() : val(0), next(nullptr) {}
@@ -33,30 +34,32 @@ struct ListNode {
     ListNode(int x, ListNode *next) : val(x), next(next) {}
 };
 
-struct TreeNode {
+struct TreeNode
+{
     int val;
     TreeNode *left;
     TreeNode *right;
     TreeNode() : val(0), left(nullptr), right(nullptr) {}
     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
-    TreeNode(int x, TreeNode *left, TreeNode *right)
-        : val(x), left(left), right(right) {}
+    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
 };
 
 // N叉树的Node
-class Node {
+class Node
+{
   public:
     int val;
     vector<Node *> children;
     Node() {}
     Node(int _val) { val = _val; }
     Node(int _val, vector<Node *> _children) {
-        val = _val;
+        val      = _val;
         children = _children;
     }
 };
 
-class Solution {
+class Solution
+{
   public:
     // ===============动态规划========================
     int minDistance(string word1, string word2);
@@ -87,11 +90,11 @@ class Solution {
     int maxProfit_2(vector<int> &prices);
     // 123. 买卖股票的最佳时机 III
     int maxProfit_3(vector<int> &prices);
-    
-    //300. 最长递增子序列
-    int lengthOfLIS(vector<int>& nums);
 
-  //===============回溯====================
+    // 300. 最长递增子序列
+    int lengthOfLIS(vector<int> &nums);
+
+    //===============回溯====================
 
     // 77.组合
     vector<vector<int>> combine(int n, int k);
@@ -183,7 +186,7 @@ class Solution {
     //===============栈=============
     // 1047. 删除字符串中的所有相邻重复项
     string removeDuplicates(string s);
-    //224.基本计算器
+    // 224.基本计算器
     int calculate(string s);
 
     //============单调栈============
@@ -202,27 +205,32 @@ class Solution {
 
     // 455. 分发饼干
     int findContentChildren(vector<int> &g, vector<int> &s);
-    
-    int wiggleMaxLength(vector<int>& nums);
-    
-    //53. 最大子数组和
-     int maxSubArray(vector<int>& nums);
-     
-     //76. 最小覆盖子串
+
+    int wiggleMaxLength(vector<int> &nums);
+
+    // 53. 最大子数组和
+    int maxSubArray(vector<int> &nums);
+
+    // 76. 最小覆盖子串
     string minWindow(string s, string t);
 
-    //55.跳跃游戏
-     bool canJump(vector<int>& nums);
-    //45.跳跃游戏2
-     int jump(vector<int>& nums);
-     
+    // 55.跳跃游戏
+    bool canJump(vector<int> &nums);
+    // 45.跳跃游戏2
+    int jump(vector<int> &nums);
+
     //  1005. K 次取反后最大化的数组和
-     int largestSumAfterKNegations(vector<int>& nums, int k);
+    int largestSumAfterKNegations(vector<int> &nums, int k);
+
+
+    //  365 水壶问题
+    bool canMeasureWater(int jug1Capacity, int jug2Capacity, int targetCapacity);
+
 
   private:
     void quickSort(int arr[], int left, int right);
 };
 
-} // namespace leetcode
+}// namespace leetcode
 
-#endif // leetcode_h
+#endif// leetcode_h

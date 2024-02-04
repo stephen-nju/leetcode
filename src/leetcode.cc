@@ -1596,7 +1596,6 @@ int Solution::calculate(string s) {
     //参考
     // https://leetcode.cn/problems/basic-calculator/solutions/2568955/chu-li-ji-suan-qi-de-yi-ban-si-lu-ke-jie-dxkv/
 
-
     int index = 0;
     s.erase(std::remove(s.begin(), s.end(), ' '), s.end());
     std::function<int(string)> calc = [&](string s) -> int {
@@ -1647,5 +1646,45 @@ int Solution::calculate(string s) {
     return calc(s);
 }
 
+bool canMeasureWater(int jug1Capacity, int jug2Capacity, int targetCapacity) {
+    //广度优先搜索
+    typedef std::pair<int,int> pairs;
+    std::queue<pairs> que;
+    // 记录访问过的状态
+    auto hash_function=[](const pairs& o){return std::hash<int>()(o.first) ^ std::hash<int>()(o.second);};
+    std::unordered_set<pairs,decltype(hash_function)> visited(0,hash_function);
+    que.push(pairs(0,0));
+    while(!que.empty()){
+        //开始搜索
+        int size=que.size();
+        pairs current=que.front();que.pop();
+        int x=current.first;
+        int y=current.second;
+        if(visited.count(current)){
+            continue;
+        }
+        visited.insert(pairs(x,y));
+        if(x==targetCapacity or y==targetCapacity or x+y==targetCapacity){
+            return true;
+        }
+        /////先处理返回的情况
+        //先把x壶装满
+        que.emplace(jug1Capacity,y);
+        //把y壶装满
+        que.emplace(x,jug2Capacity);
+        //x壶倒空
+        que.emplace(0,y);
+        //y壶倒空
+        que.emplace(x,0);
+        //把 X 壶的水灌进 Y 壶，直至灌满或倒空
+        que.emplace(x-std::min(jug2Capacity-y,x),y+std::min(x,jug2Capacity-y));
+        //把 Y 壶的水灌进 x 壶，直至灌满或倒空
+        que.emplace(x+std::min(jug1Capacity-x,y),y-std::min(y,jug1Capacity-x));
 
+
+    }
+    return false;
+
+
+}
 }// namespace leetcode
